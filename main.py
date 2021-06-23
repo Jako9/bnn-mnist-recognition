@@ -78,12 +78,18 @@ def main():
         print("Running on the CPU")
 
     # MNIST Datenset (herunter-) laden
-    mnist_data = datasets.MNIST(
+    train_data = datasets.MNIST(
         "", train=True, download=True, transform=transforms.Compose([transforms.ToTensor()]))
 
     # Trainingsdaten einlesen
     training_set = DataLoader(
-        mnist_data, batch_size=10, shuffle=True)
+        train_data, batch_size=10, shuffle=True)
+
+    test_data = datasets.MNIST(
+        "", train=False, download=True, transform=transforms.Compose([transforms.ToTensor()]))
+
+    test_set = DataLoader(
+        test_data, batch_size=10, shuffle=True)
 
     # BNN Instanz
     bnn = NeuralNetwork().to(device)
@@ -125,7 +131,8 @@ def main():
 
 
     # Statistik
-    test(bnn,device,training_set)
+    test(bnn,device,test_set)
+    
 
 if __name__ == '__main__':
     main()
