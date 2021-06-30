@@ -7,6 +7,9 @@ import torch.optim as optim
 from torchvision import transforms, datasets
 from torch.utils.data import DataLoader
 
+###run 'pip install matplotlib' in console
+import matplotlib.pyplot as plt
+
 
 
 # BNN Definition
@@ -17,19 +20,27 @@ class NeuralNetwork(nn.Module):
         self.conv2 = nn.Conv2d(32, 64, 3, 1)
         self.dropout1 = nn.Dropout(0.25)
         self.dropout2 = nn.Dropout(0.5)
-        self.fc1 = nn.Linear(9216, 128)
-        self.fc2 = nn.Linear(128, 10)
+        self.fc1 = nn.Linear(9216, 1024)
+        self.fc2 = nn.Linear(1024, 10)
 
     def forward(self, x):
+
         x = self.conv1(x)
-        x = F.relu(x)
+        #x = torch.sign(x)
+        x = torch.relu(x)
+
         x = self.conv2(x)
-        x = F.relu(x)
+        #x = torch.sign(x)
+        x = torch.relu(x)
+
         x = F.max_pool2d(x, 2)
         x = self.dropout1(x)
         x = torch.flatten(x, 1)
+
         x = self.fc1(x)
-        x = F.relu(x)
+        #x = torch.sign(x)
+        x = torch.relu(x)
+
         x = self.dropout2(x)
         x = self.fc2(x)
         output = F.log_softmax(x, dim=1)
@@ -67,11 +78,11 @@ def test(model, device, test_loader):
 
     print(f"Genauigkeit: {100 * hit / total}%")
 
-    
+
 
 def main():
     if torch.cuda.is_available():
-        device = torch.device("cuda")  # you can continue going on here, like cuda:1 cuda:2....etc. 
+        device = torch.device("cuda")  # you can continue going on here, like cuda:1 cuda:2....etc.
         print("Running on the GPU")
     else:
         device = torch.device("cpu")
@@ -79,14 +90,25 @@ def main():
 
     # MNIST Datenset (herunter-) laden
     train_data = datasets.MNIST(
-        "", train=True, download=True, transform=transforms.Compose([transforms.ToTensor()]))
+        "", train=True, download=True, transform=transforms.Compose([transforms.ToTensor(),
+                                                                    ThresholdTransform(thr_255=240)
+                                                                    ]))
 
     # Trainingsdaten einlesen
     training_set = DataLoader(
         train_data, batch_size=10, shuffle=True)
 
+    ############Testing image binarization##################
+    #for data in training_set:
+    #    break;
+
+    #plt.imshow(data[0][0].view(28,28))
+    #plt.show()
+
     test_data = datasets.MNIST(
-        "", train=False, download=True, transform=transforms.Compose([transforms.ToTensor()]))
+        "", train=False, download=True, transform=transforms.Compose([transforms.ToTensor(),
+                                                                    ThresholdTransform(thr_255=240)
+                                                                    ]))
 
     test_set = DataLoader(
         test_data, batch_size=10, shuffle=True)
@@ -132,12 +154,13 @@ def main():
 
     # Statistik
     test(bnn,device,test_set)
-    
+
+class ThresholdTransform(object):
+  def __init__(self, thr_255):
+    self.thr = thr_255 / 255.  # input threshold for [0..255] gray level, convert to [0..1]
+
+  def __call__(self, x):
+    return (x > self.thr).to(x.dtype)  # do not change the data type
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
