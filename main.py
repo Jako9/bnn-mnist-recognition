@@ -39,38 +39,39 @@ class Quantization:
 class NeuralNetwork(nn.Module):
     def __init__(self):
         super(NeuralNetwork, self).__init__()
-        self.conv1 = QuantizedConv2d(1, 32, 3, 1,quantization=Quantization(torch.sign))
-        self.conv2 = QuantizedConv2d(32, 64, 3, 1,quantization=Quantization(torch.sign))
-        self.dropout1 = nn.Dropout(0.3)
-        self.dropout2 = nn.Dropout(0.5)
-        self.fc1 = QuantizedLinear(9216, 4096,quantization=Quantization(torch.sign))
-        self.fc2 = QuantizedLinear(4096, 10,quantization=Quantization(torch.sign))
-        self.scale = Scale()
+        self.infl_ratio=3
+        self.fc1 = BinarizeLinear(784, 2048*self.infl_ratio)
+        self.htanh1 = nn.Hardtanh()
+        self.bn1 = nn.BatchNorm1d(2048*self.infl_ratio)
+        self.fc2 = BinarizeLinear(2048*self.infl_ratio, 2048*self.infl_ratio)
+        self.htanh2 = nn.Hardtanh()
+        self.bn2 = nn.BatchNorm1d(2048*self.infl_ratio)
+        self.fc3 = BinarizeLinear(2048*self.infl_ratio, 2048*self.infl_ratio)
+        self.htanh3 = nn.Hardtanh()
+        self.bn3 = nn.BatchNorm1d(2048*self.infl_ratio)
+        self.fc4 = nn.Linear(2048*self.infl_ratio, 10)
+        self.logsoftmax=nn.LogSoftmax()
+        self.drop=nn.Dropout(0.5)
 
     def forward(self, x):
-        x = self.conv1(x)
-        #x = torch.sign(x)
-        x = torch.relu(x)
-
-
-        x = self.conv2(x)
-        #x = torch.sign(x)
-        x = torch.relu(x)
-
-        x = F.max_pool2d(x, 2)
-        x = self.dropout1(x)
-        x = torch.flatten(x, 1)
-
-
+        x = x.view(-1, 28*28)
         x = self.fc1(x)
-        #x = torch.sign(x)
-        #x = torch.relu(x)
-
-        x = self.dropout2(x)
+        x = self.bn1(x)
+        x = self.htanh1(x)
         x = self.fc2(x)
-        output = F.log_softmax(x, dim=1)
-        #output = self.scale(x)
-        return output
+        x = self.bn2(x)
+        x = self.htanh2(x)
+        x = self.fc3(x)
+        x = self.drop(x)
+        x = self.bn3(x)
+        
+        x = self.htanh3(x)
+        
+        x = self.fc4(x)
+        
+        x = self.logsoftmax(x)
+        
+        return x
 
 def train(args, model, train_loader, optimizer, device, epoch):
     model.train()
@@ -192,6 +193,31 @@ def main():
 
     # Statistik
     test(bnn,device,test_set)
+
+def Binarize(tensor,quant_mode='det'):
+    if quant_mode=='det':
+        return tensor.sign()
+    else:
+        return tensor.add_(1).div_(2).add_(torch.rand(tensor.size()).add(-0.5)).clamp_(0,1).round().mul_(2).add_(-1)
+
+class BinarizeLinear(nn.Linear):
+
+    def __init__(self, *kargs, **kwargs):
+        super(BinarizeLinear, self).__init__(*kargs, **kwargs)
+
+    def forward(self, input):
+
+        if input.size(1) != 784:
+            input.data=Binarize(input.data)
+        if not hasattr(self.weight,'org'):
+            self.weight.org=self.weight.data.clone()
+        self.weight.data=Binarize(self.weight.org)
+        out = nn.functional.linear(input, self.weight)
+        if not self.bias is None:
+            self.bias.org=self.bias.data.clone()
+            out += self.bias.view(1, -1).expand_as(out)
+
+        return out
 
 class QuantizedLinear(nn.Linear):
     def __init__(self, *args, **kwargs):
