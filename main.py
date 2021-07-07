@@ -111,10 +111,10 @@ def test(model, device, test_loader):
                     hit += 1
                 total += 1
 
-    for layer in model.children():
-        if(type(layer) == type(QuantizedConv2d(1, 32, 3, 1,quantization=Quantization(torch.sign)))):
-            for weight in layer.weight:
-                print(weight)
+    # for layer in model.children():
+    #     if(type(layer) == type(BinarizeLinear(2048*3, 2048*3))):
+    #         for weight in layer.weight:
+    #             print(weight)
     print(f"Genauigkeit: {100 * hit / total}%")
 
 
