@@ -39,7 +39,7 @@ class Quantization:
 class NeuralNetwork(nn.Module):
     def __init__(self):
         super(NeuralNetwork, self).__init__()
-        self.infl_ratio=3
+        self.infl_ratio=1
         self.fc1 = BinarizeLinear(784, 2048*self.infl_ratio)
         self.htanh1 = nn.Hardtanh()
         self.bn1 = nn.BatchNorm1d(2048*self.infl_ratio)
@@ -56,14 +56,14 @@ class NeuralNetwork(nn.Module):
     def forward(self, x):
         x = x.view(-1, 28*28)
         x = self.fc1(x)
-        x = self.bn1(x)
+        #x = self.bn1(x)
         x = self.htanh1(x)
         x = self.fc2(x)
-        x = self.bn2(x)
+        #x = self.bn2(x)
         x = self.htanh2(x)
         x = self.fc3(x)
         x = self.drop(x)
-        x = self.bn3(x)
+        #x = self.bn3(x)
         
         x = self.htanh3(x)
         
@@ -111,10 +111,24 @@ def test(model, device, test_loader):
                     hit += 1
                 total += 1
 
-    # for layer in model.children():
-    #     if(type(layer) == type(BinarizeLinear(2048*3, 2048*3))):
-    #         for weight in layer.weight:
-    #             print(weight)
+    #Clear File
+    f = open("export/weights.txt", "w")
+    f.write("")
+    f.close()
+    #torch.save(model.state_dict(), "export/model.pt")
+    f = open("export/weights.txt", "a")
+    cnt = 0
+    for child in model.children():
+        if(type(child) == type(BinarizeLinear(2048, 2048))):
+            for layer in child.weight.data:
+                for node in layer:
+                    f.write(str(node))
+                    cnt +=1
+                break
+    print(cnt)
+       
+    f.close()
+
     print(f"Genauigkeit: {100 * hit / total}%")
 
 
