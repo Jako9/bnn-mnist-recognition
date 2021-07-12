@@ -40,30 +40,30 @@ class NeuralNetwork(nn.Module):
     def __init__(self):
         super(NeuralNetwork, self).__init__()
         self.infl_ratio=1
-        self.fc1 = BinarizeLinear(784, 2048*self.infl_ratio)
+        self.fc1 = BinarizeLinear(784, 500)
         self.htanh1 = nn.Hardtanh()
-        self.bn1 = nn.BatchNorm1d(2048*self.infl_ratio)
-        self.fc2 = BinarizeLinear(2048*self.infl_ratio, 2048*self.infl_ratio)
+        self.bn1 = nn.BatchNorm1d(500)
+        self.fc2 = BinarizeLinear(500,500)
         self.htanh2 = nn.Hardtanh()
-        self.bn2 = nn.BatchNorm1d(2048*self.infl_ratio)
-        self.fc3 = BinarizeLinear(2048*self.infl_ratio, 2048*self.infl_ratio)
+        self.bn2 = nn.BatchNorm1d(500)
+        self.fc3 = BinarizeLinear(500,500)
         self.htanh3 = nn.Hardtanh()
-        self.bn3 = nn.BatchNorm1d(2048*self.infl_ratio)
-        self.fc4 = nn.Linear(2048*self.infl_ratio, 10)
+        self.bn3 = nn.BatchNorm1d(500)
+        self.fc4 = nn.Linear(500, 10)
         self.logsoftmax=nn.LogSoftmax()
         self.drop=nn.Dropout(0.5)
 
     def forward(self, x):
         x = x.view(-1, 28*28)
         x = self.fc1(x)
-        #x = self.bn1(x)
+        x = self.bn1(x)
         x = self.htanh1(x)
         x = self.fc2(x)
-        #x = self.bn2(x)
+        x = self.bn2(x)
         x = self.htanh2(x)
         x = self.fc3(x)
         x = self.drop(x)
-        #x = self.bn3(x)
+        x = self.bn3(x)
         
         x = self.htanh3(x)
         
@@ -111,25 +111,33 @@ def test(model, device, test_loader):
                     hit += 1
                 total += 1
 
-    #Clear File
+    print(f"Genauigkeit: {100 * hit / total}%")
+
+def export(model):
+    print("Starte Export")
+     #Clear File
     f = open("export/weights.txt", "w")
     f.write("")
     f.close()
     #torch.save(model.state_dict(), "export/model.pt")
     f = open("export/weights.txt", "a")
     cnt = 0
-    for child in model.children():
+    #f.write(model.fc1.weight)
+    #print(model.fc2.weight)
+    for child in model.modules():
         if(type(child) == type(BinarizeLinear(2048, 2048))):
-            for layer in child.weight.data:
-                for node in layer:
-                    f.write(str(node))
-                    cnt +=1
-                break
-    print(cnt)
-       
+            for layer in child.weight:
+                f.write(str(layer))
+                # for node in layer:
+                #     print(node)
+                #     #f.write(str(node))
+                #     cnt +=1
+                #     break
+                
+                
+        
+    print(cnt)       
     f.close()
-
-    print(f"Genauigkeit: {100 * hit / total}%")
 
 
 
@@ -207,6 +215,8 @@ def main():
 
     # Statistik
     test(bnn,device,test_set)
+
+    export(bnn)
 
 def Binarize(tensor,quant_mode='det'):
     if quant_mode=='det':
