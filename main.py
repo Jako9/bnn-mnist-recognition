@@ -7,6 +7,7 @@ import torch.optim as optim
 from torchvision import transforms, datasets
 from torch.utils.data import DataLoader
 from torch.autograd import Function
+from torch.optim.lr_scheduler import StepLR
 #import binarizePM1
 
 ###run 'pip install matplotlib' in console
@@ -160,43 +161,17 @@ def main():
         device = torch.device("cpu")
         print("Running on the CPU")
 
-    # MNIST Datenset (herunter-) laden
-    train_data = datasets.MNIST(
-        "", train=True, download=True, transform=transforms.Compose([transforms.ToTensor(),
-                                                                    ThresholdTransform(thr_255=128)
-                                                                    ]))
-
-    # Trainingsdaten einlesen
-    training_set = DataLoader(
-        train_data, batch_size=200, shuffle=True)
-
-    ############Testing image binarization##################
-    for data in training_set:
-        break;
-
-    plt.imshow(data[0][0].view(28,28))
-    plt.show()
-
-    test_data = datasets.MNIST(
-        "", train=False, download=True, transform=transforms.Compose([transforms.ToTensor(),
-                                                                    ThresholdTransform(thr_255=128)
-                                                                    ]))
-
-    test_set = DataLoader(
-        test_data, batch_size=10, shuffle=True)
-
-    # BNN Instanz
-    bnn = NeuralNetwork().to(device)
-
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
-    parser.add_argument('--batch-size', type=int, default=64, metavar='N',
-                            help='input batch size for training (default: 64)')
-    parser.add_argument('--test-batch-size', type=int, default=3000, metavar='N',
-                            help='input batch size for testing (default: 1000)')
-    parser.add_argument('--epochs', type=int, default=14, metavar='N',
+    parser.add_argument('--batch-size', type=int, default=200, metavar='N',
+                            help='input batch size for training (default: 200)')
+    parser.add_argument('--test-batch-size', type=int, default=10, metavar='N',
+                            help='input batch size for testing (default: 10) ')
+    parser.add_argument('--epochs', type=int, default=3, metavar='N',
                             help='number of epochs to train (default: 14)')
     parser.add_argument('--lr', type=float, default=1.5, metavar='LR',
                             help='learning rate (default: 1.0)')
+    parser.add_argument('--step-size', type=int, default=25, metavar='M',
+                        help='Learning step size (default: 5)')
     parser.add_argument('--gamma', type=float, default=1.5, metavar='M',
                             help='Learning rate step gamma (default: 0.7)')
     parser.add_argument('--no-cuda', action='store_true', default=False,
@@ -214,14 +189,45 @@ def main():
 
     torch.manual_seed(args.seed)
 
+    # MNIST Datenset (herunter-) laden
+    train_data = datasets.MNIST(
+        "", train=True, download=True, transform=transforms.Compose([transforms.ToTensor(),
+                                                                    ThresholdTransform(thr_255=128)
+                                                                    ]))
 
-    # Anzahl Epochen zum Trainieren
-    epochs = 3
+    # Trainingsdaten einlesen
+    training_set = DataLoader(
+        train_data, batch_size=args.batch_size, shuffle=True)
+
+    ############Testing image binarization##################
+    for data in training_set:
+        break;
+
+    plt.imshow(data[0][0].view(28,28))
+    plt.show()
+
+    test_data = datasets.MNIST(
+        "", train=False, download=True, transform=transforms.Compose([transforms.ToTensor(),
+                                                                    ThresholdTransform(thr_255=128)
+                                                                    ]))
+
+    test_set = DataLoader(
+        test_data, batch_size=args.test_batch_size, shuffle=True)
+
+    # BNN Instanz
+    bnn = NeuralNetwork().to(device)
+    # optimizer = optim.Adam(bnn.parameters(), lr=args.lr)
+    # # optimizer = Clippy(model.parameters(), lr=args.lr)
+
+    # scheduler = StepLR(optimizer, step_size=args.step_size, gamma=args.gamma)
+
+
+    
     # Fortschritt (UI)
     optimizer = optim.Adadelta(bnn.parameters(), lr=args.lr)
-    for epoch in range(epochs):
+    for epoch in range(args.epochs):
         train(args, bnn,training_set,optimizer,device,epoch)
-        print(f"Fortschritt: {epoch+1}/{epochs}")
+        print(f"Fortschritt: {epoch+1}/{args.epochs}")
 
 
     # Statistik
