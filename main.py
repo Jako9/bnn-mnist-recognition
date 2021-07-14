@@ -97,6 +97,7 @@ def test(model, device, test_loader):
     hit = 0
     total = 0
     print("Genauigkeit wird ausgewertet")
+    model.eval()
 
     with torch.no_grad():
         for data in test_loader:
@@ -108,6 +109,8 @@ def test(model, device, test_loader):
                 total += 1
 
     print(f"Genauigkeit: {100 * hit / total}%")
+    model.train()
+
 
 def export(model):
     print("Starte Export")
@@ -165,7 +168,7 @@ def main():
 
     # Trainingsdaten einlesen
     training_set = DataLoader(
-        train_data, batch_size=256, shuffle=True)
+        train_data, batch_size=200, shuffle=True)
 
     ############Testing image binarization##################
     for data in training_set:
@@ -176,7 +179,7 @@ def main():
 
     test_data = datasets.MNIST(
         "", train=False, download=True, transform=transforms.Compose([transforms.ToTensor(),
-                                                                    ThresholdTransform(thr_255=180)
+                                                                    ThresholdTransform(thr_255=128)
                                                                     ]))
 
     test_set = DataLoader(
