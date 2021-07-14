@@ -258,6 +258,7 @@ def main():
 
     export(bnn)
     exportThreshold(bnn)
+    print("Done!")
 
 def Binarize(tensor,quant_mode='det'):
     if quant_mode=='det':
