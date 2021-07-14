@@ -43,13 +43,13 @@ class NeuralNetwork(nn.Module):
         self.fc1 = BinarizeLinear(784, 500)
         self.htanh1 = nn.Hardtanh()
         self.bn1 = nn.BatchNorm1d(500)
-        self.fc2 = BinarizeLinear(500,500)
+        self.fc2 = BinarizeLinear(500,1024)
         self.htanh2 = nn.Hardtanh()
-        self.bn2 = nn.BatchNorm1d(500)
-        self.fc3 = BinarizeLinear(500,500)
+        self.bn2 = nn.BatchNorm1d(1024)
+        self.fc3 = BinarizeLinear(1024,1024)
         self.htanh3 = nn.Hardtanh()
-        self.bn3 = nn.BatchNorm1d(500)
-        self.fc4 = nn.Linear(500, 10)
+        self.bn3 = nn.BatchNorm1d(1024)
+        self.fc4 = nn.Linear(1024, 10)
         self.logsoftmax=nn.LogSoftmax()
         self.drop=nn.Dropout(0.5)
 
@@ -64,13 +64,13 @@ class NeuralNetwork(nn.Module):
         x = self.fc3(x)
         x = self.drop(x)
         x = self.bn3(x)
-        
+
         x = self.htanh3(x)
-        
+
         x = self.fc4(x)
-        
+
         x = self.logsoftmax(x)
-        
+
         return x
 
 def train(args, model, train_loader, optimizer, device, epoch):
@@ -122,21 +122,33 @@ def export(model):
     #torch.save(model.state_dict(), "export/model.pt")
     f = open("export/weights.txt", "a")
     cnt = 0
+    layerCount = 1
     #f.write(model.fc1.weight)
     #print(model.fc2.weight)
-    for child in model.modules():
-        if(type(child) == type(BinarizeLinear(2048, 2048))):
-            for layer in child.weight:
-                f.write(str(layer))
-                # for node in layer:
-                #     print(node)
-                #     #f.write(str(node))
-                #     cnt +=1
+    torch.set_printoptions(profile="full")
+    for layer in model.modules():
+        if(type(layer) == type(BinarizeLinear(2048, 2048))):
+            print("starting layer: " + str(layerCount))
+            layerCount += 1
+            finishedNodes = 0
+            nextStep = 0
+            totalLayerNodes = layer.weight.size()[0]
+            for node in layer.weight:
+                #cnt +=1
+                #f.write(str(node))
+                if((finishedNodes / totalLayerNodes) >= nextStep):
+                    nextStep += 0.05
+                    print("{:.1f}".format((finishedNodes / totalLayerNodes) * 100) + "% done")
+                for edge in node:
+                     #print(edge)
+                     f.write(str(edge))
+                     cnt +=1
                 #     break
-                
-                
-        
-    print(cnt)       
+                finishedNodes += 1
+
+
+
+    print(cnt)
     f.close()
 
 
