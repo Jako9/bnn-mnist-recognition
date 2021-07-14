@@ -97,7 +97,7 @@ def train(args, model, train_loader, optimizer, device, epoch):
 def test(model, device, test_loader):
     hit = 0
     total = 0
-    print("Genauigkeit wird ausgewertet")
+    print("Evaluating accuracy")
     model.eval()
 
     with torch.no_grad():
@@ -109,12 +109,30 @@ def test(model, device, test_loader):
                     hit += 1
                 total += 1
 
-    print(f"Genauigkeit: {100 * hit / total}%")
+    print(f"Accuracy: {100 * hit / total}%")
     model.train()
 
+def exportThreshold(model):
+    print("Export thresholds")
+     #Clear File
+    f = open("export/thresholds.txt", "w")
+    f.write("")
+    f.close()
+    f = open("export/thresholds.txt", "a")
+    for layer in model.modules():
+        if(type(layer) == type(nn.BatchNorm1d(1024))):
+            layerThreshold = "["
+            for node in layer.weight:
+                layerThreshold += (str(node.item())+",")
+            layerThreshold = layerThreshold[:-1]
+            layerThreshold += "]"
+            f.write(layerThreshold)
+    f.close()
+            
+    
 
 def export(model):
-    print("Starte Export")
+    print("Starting export...")
      #Clear File
     f = open("export/weights.txt", "w")
     f.write("")
@@ -128,27 +146,32 @@ def export(model):
     torch.set_printoptions(profile="full")
     for layer in model.modules():
         if(type(layer) == type(BinarizeLinear(2048, 2048))):
-            print("starting layer: " + str(layerCount))
+            layerWeights = "["
+            print("----Exporting layer " + str(layerCount) + "----")
             layerCount += 1
             finishedNodes = 0
-            nextStep = 0
+            #nextStep = 0
             totalLayerNodes = layer.weight.size()[0]
+            printProgressBar(0, totalLayerNodes, prefix = 'Progress:', suffix = 'Complete', length = 50)
             for node in layer.weight:
                 #cnt +=1
                 #f.write(str(node))
-                if((finishedNodes / totalLayerNodes) >= nextStep):
-                    nextStep += 0.05
-                    print("{:.1f}".format((finishedNodes / totalLayerNodes) * 100) + "% done")
-                for edge in node:
+                #if((finishedNodes / totalLayerNodes) >= nextStep):
+                    #nextStep += 0.05
+                    #print("{:.1f}".format((finishedNodes / totalLayerNodes) * 100) + "% done")
+                for cnt, edge in enumerate(node):
                      #print(edge)
-                     f.write(str(edge))
-                     cnt +=1
-                #     break
+                     layerWeights += str(int(edge.item()))
+                     layerWeights += ","
+                     #layerWeights += str(edge)
+                     #break
                 finishedNodes += 1
+                printProgressBar(finishedNodes, totalLayerNodes, prefix = 'Progress:', suffix = 'Complete', length = 50)
+            print()
+            f.write(layerWeights[:-1] + "]")
 
 
 
-    print(cnt)
     f.close()
 
 
@@ -166,7 +189,7 @@ def main():
                             help='input batch size for training (default: 200)')
     parser.add_argument('--test-batch-size', type=int, default=10, metavar='N',
                             help='input batch size for testing (default: 10) ')
-    parser.add_argument('--epochs', type=int, default=3, metavar='N',
+    parser.add_argument('--epochs', type=int, default=1, metavar='N',
                             help='number of epochs to train (default: 14)')
     parser.add_argument('--lr', type=float, default=1.5, metavar='LR',
                             help='learning rate (default: 1.0)')
@@ -201,10 +224,10 @@ def main():
 
     ############Testing image binarization##################
     for data in training_set:
-        break;
+        break
 
-    plt.imshow(data[0][0].view(28,28))
-    plt.show()
+    #plt.imshow(data[0][0].view(28,28))
+    #plt.show()
 
     test_data = datasets.MNIST(
         "", train=False, download=True, transform=transforms.Compose([transforms.ToTensor(),
@@ -227,19 +250,41 @@ def main():
     optimizer = optim.Adadelta(bnn.parameters(), lr=args.lr)
     for epoch in range(args.epochs):
         train(args, bnn,training_set,optimizer,device,epoch)
-        print(f"Fortschritt: {epoch+1}/{args.epochs}")
+        print(f"Progress: {epoch+1}/{args.epochs}")
 
 
     # Statistik
     test(bnn,device,test_set)
 
-    #export(bnn)
+    export(bnn)
+    exportThreshold(bnn)
 
 def Binarize(tensor,quant_mode='det'):
     if quant_mode=='det':
         return tensor.sign()
     else:
         return tensor.add_(1).div_(2).add_(torch.rand(tensor.size()).add(-0.5)).clamp_(0,1).round().mul_(2).add_(-1)
+
+def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
+    """
+    Call in a loop to create terminal progress bar
+    @params:
+        iteration   - Required  : current iteration (Int)
+        total       - Required  : total iterations (Int)
+        prefix      - Optional  : prefix string (Str)
+        suffix      - Optional  : suffix string (Str)
+        decimals    - Optional  : positive number of decimals in percent complete (Int)
+        length      - Optional  : character length of bar (Int)
+        fill        - Optional  : bar fill character (Str)
+        printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
+    """
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    filledLength = int(length * iteration // total)
+    bar = fill * filledLength + '-' * (length - filledLength)
+    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = printEnd)
+    # Print New Line on Complete
+    if iteration == total: 
+        print()
 
 class BinarizeLinear(nn.Linear):
 
