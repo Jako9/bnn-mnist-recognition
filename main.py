@@ -51,7 +51,6 @@ class NeuralNetwork(nn.Module):
         self.bn3 = nn.BatchNorm1d(1024)
         self.fc4 = nn.Linear(1024, 10)
         self.logsoftmax=nn.LogSoftmax()
-        self.drop=nn.Dropout(0.5)
 
     def forward(self, x):
         x = x.view(-1, 28*28)
@@ -62,13 +61,10 @@ class NeuralNetwork(nn.Module):
         x = self.bn2(x)
         x = self.htanh2(x)
         x = self.fc3(x)
-        x = self.drop(x)
         x = self.bn3(x)
-
         x = self.htanh3(x)
 
         x = self.fc4(x)
-
         x = self.logsoftmax(x)
 
         return x
@@ -164,7 +160,7 @@ def main():
     # MNIST Datenset (herunter-) laden
     train_data = datasets.MNIST(
         "", train=True, download=True, transform=transforms.Compose([transforms.ToTensor(),
-                                                                    ThresholdTransform(thr_255=180)
+                                                                    ThresholdTransform(thr_255=128)
                                                                     ]))
 
     # Trainingsdaten einlesen
@@ -217,7 +213,7 @@ def main():
 
 
     # Anzahl Epochen zum Trainieren
-    epochs = 1
+    epochs = 3
     # Fortschritt (UI)
     optimizer = optim.Adadelta(bnn.parameters(), lr=args.lr)
     for epoch in range(epochs):
@@ -228,7 +224,7 @@ def main():
     # Statistik
     test(bnn,device,test_set)
 
-    export(bnn)
+    #export(bnn)
 
 def Binarize(tensor,quant_mode='det'):
     if quant_mode=='det':
