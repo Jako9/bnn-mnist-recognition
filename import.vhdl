@@ -11,7 +11,7 @@ architecture behaviour of reader is
   -- time between batches
   constant batch_interval: time := 1 ns;
   -- size of batches
-  constant batch_size: integer := 80;
+  constant batch_size: integer := 128;
   -- output signal (batch data)
   signal batch_data: bit_vector(batch_size - 1 downto 0);
 begin
@@ -25,16 +25,17 @@ begin
   begin
     -- open file
     file_open(v_file, file_name, read_mode);
-
     while not endfile(v_file) loop
       -- read line of file
       readline(v_file, v_line);
       -- read line into bit_vector
-      hread(v_line, v_lvec);
-      -- write bit_vector to output signal
-      batch_data <= v_lvec;
-      -- wait for interval
-      wait for batch_interval;
+      while v_line'length >= batch_size loop
+        read(v_line, v_lvec);
+        -- write bit_vector to output signal
+        batch_data <= v_lvec;
+        -- wait for interval
+        wait for batch_interval;
+      end loop;
     end loop;
 
     -- close file

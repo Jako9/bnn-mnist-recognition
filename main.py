@@ -154,7 +154,7 @@ def export(model):
     torch.set_printoptions(profile="full")
     for layer in model.modules():
         if(type(layer) == type(BinarizeLinear(2048, 2048))):
-            layerWeights = "["
+            layerWeights = ""
             print("----Exporting layer " + str(layerCount) + "----")
             layerCount += 1
             finishedNodes = 0
@@ -176,8 +176,7 @@ def export(model):
                 finishedNodes += 1
                 printProgressBar(finishedNodes, totalLayerNodes,
                                  prefix='Progress:', suffix='Complete', length=50)
-            print()
-            f.write(layerWeights[:-1] + "]")
+            f.write(layerWeights[:-1])
 
     f.close()
 
