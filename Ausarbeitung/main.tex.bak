@@ -1,0 +1,45 @@
+\include{header}
+
+\begin{document}
+
+% -------------------------------------------------------------------
+% Titelseite, Inhaltsverzeichnis, Abbildungsverzeichnis, usw.
+
+\include{kapitel/titelseite} % <- Hier sollten Name/Titel/usw. eingetragen werden!
+\pagenumbering{roman}
+\tableofcontents
+\listoffigures
+\addcontentsline{toc}{chapter}{Abbildungsverzeichnis}
+%\listofalgorithms
+% ...
+\clearpage
+\pagenumbering{arabic}
+% -------------------------------------------------------------------
+
+% -------------------------------------------------------------------
+% Hauptteil
+\include{kapitel/einleitung}
+\include{kapitel/kapitel2}
+% ... hier können weitere kapitel eingefügt werden!
+% -------------------------------------------------------------------
+
+% -------------------------------------------------------------------
+% Anhang
+%\appendix
+%\include{kapitel/anhang}
+% -------------------------------------------------------------------
+
+% -------------------------------------------------------------------
+% Literaturverzeichnis
+%\addcontentsline{toc}{chapter}{Literaturverzeichnis}
+%\bibliographystyle{gerplain}
+%\bibliography{literatur/literatur}
+\include{literatur/literatur}
+% -------------------------------------------------------------------
+
+% -------------------------------------------------------------------
+% Erklaerung (nicht nötig für Seminararbeiten)
+%\include{kapitel/erklaerung}
+% -------------------------------------------------------------------
+
+\end{document}

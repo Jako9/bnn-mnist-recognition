@@ -1,0 +1,93 @@
+\chapter{Einleitung}
+
+Inhalt dieses ersten Kapitels: Motivation, Hintergrund, Aufbau der Arbeit etc.
+
+
+\section{Mini-\LaTeX-Einführung}
+
+\LaTeX ist eine Sammlung von \TeX-Makros und im Gegensatz zu anderen Textverarbeitungen (wie z.\,B. Word) kein What-you-see-is-what-you-get-System, sondern vielmehr ein What-you-see-is-what-you-mean-System. Man schreibt einen Quellcode, der von einem \LaTeX-System erst verarbeitet und ansprechend visualisiert werden muss. Trotz einer längeren Einarbeitungszeit lassen sich wissenschaftliche Arbeiten -- insbesondere in der Mathematik und in den Naturwissenschaften -- anfertigen, die auch strengsten typographischen Anforderungen genügen.
+
+Grundsätzlich kann mit fast jedem Texteditor direkt in die entsprechenden Dateien mit der Endung \texttt{.tex} aus dem Ordner \texttt{kapitel} geschrieben werden. Will man allerdings eine wissenschaftliche Arbeit verfassen, die optisch ansprechend ist und den gegebenen Normen für solcherlei Texte entspricht, so empfiehlt es, sich einen \LaTeX-Editor (wie z.B. TeXnicCenter oder TeXStudio) zu verwenden und wenigstens die Grundzüge dieses Textsatzsystems zu kennen. Siehe dazu beispielsweise unter \url{ftp://ftp.fernuni-hagen.de/pub/pdf/urz-broschueren/broschueren/a0279510.pdf}, auf der Seite der deutschsprachigen Anwendervereinigung \TeX e.V. (\url{http://www.dante.de/}), der Seite des KOMA-Script Documentation Project (\url{http://www.komascript.de/}) oder in diversen Foren, wie z.\,B. unter \url{http://www.mrunix.de/forums/forumdisplay.php?f=38}, um nur einige Beispiele zu nennen. Man beachte stets, dass es zwar viele Quellen zu diesem Thema gibt, viele jedoch -- aufgrund von Neuentwicklungen oder Unwissenheit der Autoren -- mit Vorsicht zu genießen sind.
+
+Für alle \LaTeX-Neulinge folgen nun zwei einfache Beispiele für \LaTeX-Umgebungen, die eine Idee des Textsatzsystems vermitteln und den Einstieg erleichtern sollen. Eine Umgebung wird fast immer durch folgenden Rahmen bestimmt.
+\begin{lstlisting}
+\begin{Umgebung}
+...
+\end{Umgebung}
+\end{lstlisting}
+Dabei kann es sich um Tabellen, Grafiken, Programmcode oder einen mathematischen Satz handeln. Hier wird dieses Prinzip anhand zweier elementarer Komponenten wissenschaftlicher Arbeiten erläutert, Grafiken und Tabellen.
+\begin{beispiel}[Grafiken in \LaTeX]~\label{bsp:grafikeninlatex}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[height=1cm]{./bilder/tud_logo}
+        \caption{Bildunterschrift}
+    \end{figure}
+    Der entsprechende Code dazu sieht wie folgt aus:
+    \begin{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=1cm]{./bilder/tud_logo}
+    \caption{Bildunterschrift}
+\end{figure}
+    \end{lstlisting}
+    Es handelt sich hierbei also um die \texttt{figure}-Umgebung, die den Rahmen für externe Grafiken bildet. Der Befehl \lstinline{\centering} zentriert das eingefügte Bild \texttt{tud\_logo.eps} aus dem Ordner \texttt{bilder}. Der Befehl \lstinline{\caption} wird für die Bildunterschrift benötigt, eine entsprechende Nummerierung und der zugehörige Eintrag in das Abbildungsverzeichnis werden automatisch ergänzt. Die Bilddateien sollten dabei im \texttt{eps}-Format vorliegen und im Ordner \texttt{bilder} abgelegt werden. Um beispielsweise \texttt{jpg}-Bilder einzubinden, müssen weitere Änderungen vorgenommen werden, die es selbst zu recherchieren gilt (Tipp: Man recherchiere die Kompilierungsmethode "'PDFLaTeX"`, beziehungsweise "'PDF$\rightarrow$DVI$\rightarrow$PS$\rightarrow$PDF"`).
+\end{beispiel}
+
+\begin{beispiel}[Tabellen in \LaTeX]~
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{llll}
+            \toprule
+                    & Spalte A  & Spalte B  & ... \\
+            \midrule
+            Zeile 1 & Zelle A1  & Zelle B1 & ... \\
+            Zeile 2 & Zelle A2  & Zelle B2 & ... \\
+            \bottomrule
+        \end{tabular}
+        \caption{Tabellenuntertitel}
+    \end{table}
+    Der entsprechende Code dazu sieht wie folgt aus:
+    \begin{lstlisting}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{llll}
+        \toprule
+                & Spalte A  & Spalte B  & ... \\
+        \midrule
+        Zeile 1 & Zelle A1  & Zelle B1 & ... \\
+        Zeile 2 & Zelle A2  & Zelle B2 & ... \\
+        \bottomrule
+    \end{tabular}
+    \caption{Tabellenuntertitel}
+\end{table}
+    \end{lstlisting}
+    Dieses Beispiel schachtelt die Umgebungen \texttt{table} und \texttt{tabular}. Wie in Beispiel \ref{bsp:grafikeninlatex} gibt es eine Rahmenumgebung, \texttt{table}, die analog zu \texttt{figure} zu verstehen ist. Innerhalb dieser Umgebung wird nun kein externes Dokument eingebunden, sondern innerhalb von \LaTeX~eine Tabelle mit der \texttt{tabular}-Umgebung erzeugt. Näheres dazu kann den zuvor genannten Quellen entnommen werden.
+\end{beispiel}
+
+Ausnahmen dieser "`\lstinline|begin|/\lstinline|end|-Regel"' sind z.\,B. die \$-Umgebung, sie ermöglicht die Verwendung von Formeln innerhalb des Fließtextes, und die \texttt{cite}-Umgebung für Literaturverweise.
+
+\begin{beispiel}[Formeln]~
+    Es gilt $a^2+b^2=c^2$. Möchte man dies hervorheben so schreibt man besser
+    \[ a^2+b^2=c^2. \]
+    \begin{lstlisting}
+Es gilt $a^2+b^2=c^2$. Möchte man dies hervorheben so schreibt man besser
+\[ a^2+b^2=c^2. \]
+    \end{lstlisting}
+\end{beispiel}
+
+\begin{beispiel}[Zitate in Latex]~
+Tipps und Tricks zur Formulierung mathematischer Gedanken findet man z.\,B. in \cite{beutelspacher2004trivial}.
+    \begin{lstlisting}
+Tipps und Tricks zur [...] in \cite{beutelspacher2004trivial}.
+    \end{lstlisting}
+    "`beutelspacher2004trivial"' liefert dabei den eindeutigen Schlüssel, der jedem verwendeten Buch in der Datei \texttt{literatur.tex} im Ordner \texttt{literatur} zugeordnet werden muss.
+
+    Üblicherweise arbeitet man heutzutage mit BibTex, ein Programm zur vereinfachten Erstellung von Literaturangaben und "=verzeichnissen. Hier wurde zunächst darauf verzichtet um ohne Umwege eine lauffähige Version bereitzustellen. Falls man mit BibTex arbeiten möchte, so kann auf die Datei \texttt{literatur.bib} zurückgegriffen werden, aber man muss noch weitere Anpassungen vornehmen. Beispielsweise muss der Befehl \lstinline|\include{literatur/literatur}| durch die drei darüber stehenden Kommandos in der \texttt{main.tex} ersetzt werden und der Editor entsprechend angepasst werden. Die Recherche dieser Anpassungen ist hier dem engagierten Studenten überlassen.
+\end{beispiel}
+
+Man beachte, dass auch die hier gegebenen Beispiele in einer Umgebung stehen. Es handelt sich hierbei um die \texttt{ntheorem}-Umgebung, die insbesondere für mathematische Arbeiten von Bedeutung ist. Welche mathematischen Umgebungen in dieser Vorlage bereits definiert sind und in welcher Form dies geschieht lässt sich im letzten Teil der \texttt{header.tex} nachlesen. Näheres dazu erfährt man in der Dokumentation zur \texttt{ntheorem}-Umgebung.
+
+
+\section{weitere Unterkapitel}
+
+$\vdots$ 
