@@ -7,3 +7,6 @@
 *.ps
 *.thm
 *.toc
+*.nav
+*.snm
+*.vrb
