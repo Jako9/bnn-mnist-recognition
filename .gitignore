@@ -1,0 +1,9 @@
+# LaTex
+*.aux
+*.log
+*.out
+*.tex.bak
+*.lof
+*.ps
+*.thm
+*.toc
