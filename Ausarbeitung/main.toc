@@ -1,8 +1,0 @@
-\babel@toc {ngerman}{}
-\contentsline {chapter}{Abbildungsverzeichnis}{ii}{chapter*.2}%
-\contentsline {chapter}{\numberline {1}Einleitung}{1}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Mini-\LaTeX -Einführung}{1}{section.1.1}%
-\contentsline {section}{\numberline {1.2}weitere Unterkapitel}{4}{section.1.2}%
-\contentsline {chapter}{\numberline {2}Weitere Infos}{5}{chapter.2}%
-\contentsline {chapter}{\nonumberline Literaturverzeichnis}{6}{chapter*.5}%
-\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

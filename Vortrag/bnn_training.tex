@@ -1,0 +1,95 @@
+% This example is meant to be compiled with lualatex or xelatex
+% The theme itself also supports pdflatex
+\PassOptionsToPackage{unicode}{hyperref}
+\documentclass[aspectratio=1610, 12pt]{beamer}
+
+% Load packages you need here
+\usepackage[german]{babel}
+
+\usepackage{csquotes}
+    
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes,fit}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta}
+\usepackage{varwidth}
+
+
+% load the theme after all packages
+
+\usetheme[
+  showtotalframes % show total number of frames in the footline
+]{tudo}
+
+
+\lstdefinestyle{cstyle}{
+	belowcaptionskip=1\baselineskip,
+	breaklines=true,
+	frame=single,
+	xleftmargin=\parindent,
+	language=C,
+	escapeinside={(*@}{@*)},
+	showstringspaces=false,
+	basicstyle=\footnotesize\ttfamily,
+	keywordstyle=\bfseries\color{green!40!black},
+	commentstyle=\itshape\color{purple!40!black},
+	identifierstyle=\color{gray},
+	stringstyle=\color{orange},
+}
+% Put settings here, like
+\makeatletter
+\newcommand{\thickhline}{%
+	\noalign {\ifnum 0=`}\fi \hrule height 1pt
+	\futurelet \reserved@a \@xhline
+}
+\newcolumntype{"}{@{\hskip\tabcolsep\vrule width 1pt\hskip\tabcolsep}}
+
+\definecolor{preload}{RGB}{184, 17, 17} 
+\definecolor{mm1}{RGB}{189, 117, 28}
+\definecolor{mm2}{RGB}{130, 22, 87}
+\definecolor{mm3}{RGB}{15, 112, 57}
+
+
+\title{TODO Titel}
+\author[Diep, Köhler, Naumann]{Jack Diep, Florian Köhler, Yannick Naumann}
+\institute[BNN-Training]{Design Your Own CPU - Design of Embedded Systems}
+\titlegraphic{\includegraphics[width=0.675\textwidth]{images/tudo-title-2.jpg}}
+
+\setbeamertemplate{section in toc}{%
+	{\color{tugreen}\inserttocsectionnumber.}~\inserttocsection}
+\setbeamercolor{subsection in toc}{bg=white,fg=structure}
+\setbeamertemplate{subsection in toc}{%
+	\hspace{1.2em}{\color{tugreen}\rule[0.3ex]{3pt}{3pt}}~\inserttocsubsection\par}
+
+
+ \begin{document}
+
+
+\maketitle
+
+
+
+
+\begin{frame}{Inhalt}
+\tableofcontents
+
+
+\end{frame}
+\section{Section1}
+\begin{frame}{Folie2}
+
+
+
+\end{frame}
+
+
+
+\end{document}
