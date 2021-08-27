@@ -28,18 +28,19 @@ In Anwendungsgebieten, bei denen der Fokus auf geringen Hardwareanforderungen
 liegt, stoßen schnell das Problem der schwindenden Genauigkeit.
 Auf IoT-Geräten oder mobilen Platformen finden klassische neuronale Netzwerke
 daher nur eingeschränkt Nutzen.
-In 2016 wurde von Courbariaux (TODO: \dots) eine Arbeit veröffentlich,
-welche das Binarisierte neuronale Netzwerk (kurz \emph{BNN}) vorstellt,
-einem neuronalen Netzwerk welches bis zu 32-mal schneller arbeiten kann
-als ein klassisches neuronales Netzwerk.
-Die Genauigkeit des BNN könne zudem mit der Genauigkeit von jenen klassischen
-Netzwerken mithalten, wenn auch mit einer leichten Verschlechterung.
-Das BNN ermöglicht dank seiner Eigenschaften den Einsatz von
-neuronalen Netzen auf vergleichsweise schwacher Hardware und verspricht zugleich
+2016 veröffentlichten M. Courbariaux und Y. Bengio \cite{Courbariaux} eine
+wissenschaftliche Arbeit und stellen dort das
+\emph{binarisierte neuronale Netzwerk} (kurz BNN) vor.
+Dieses könne im Vergleich zu einem klassischen neuronalen Netzwerk eine
+theoretische Geschwindigkeitssteigerung auf das 32-fache erreichen.
+Die Genauigkeit des BNN liege jedoch nur knapp unter derer klassischer Netzwerke.
+Das BNN ermöglicht dank dieser Eigenschaften den Einsatz von neuronalen Netzen
+auf vergleichsweise schwacher Hardware und verspricht zugleich
 nur geringe Genauigkeitseinbüße.
 
 In dieser Ausarbeitung wird die allgemeine Funktionsweise von neuronalen
-Netzwerken erläutert und anschließend der Entwurfs eines binarisiertes
-Netzwerk dokumentiert.
-Dabei werden grundlegende Überlegungen, das Vorgehen, auftretende Probleme
-sowie dazu ermittelte Lösungen vorgestellt.
+Netzwerken erläutert und anschließend der Entwurf eines binarisiertes
+Netzwerk mit Fokus auf Handschriftenerkennung auf Basis des MNIST Datensatzes
+dokumentiert.
+Dabei werden grundlegende Überlegungen, das Vorgehen, Herausforderungen
+sowie dazu erarbeitete Lösungen vorgestellt.
