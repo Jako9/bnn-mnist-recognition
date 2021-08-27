@@ -1,8 +1,45 @@
 \chapter{Einleitung}
-Inhalt dieses ersten Kapitels: Motivation, Hintergrund, Aufbau der Arbeit etc.
+
+Neuronale Netzwerke bilden eine Unterkategorie des Machine-Learning und erlauben
+Auswertungen von Eingaben auf Basis von zuvor angelernten, empirischen
+Ergebnissen.
+Ein neuronales Netzwerk bildet ein System aus Neuronen ab, welche Schichtweise
+verbunden sind einen unidirektionalen Datenfluss erzeugen.
+Dieses System besteht üblicherweise aus einer Eingabeschicht, einer
+Ausgabeschicht und dazwischen beliebig viele \emph{versteckte} Schichten,
+welche die eigentliche Arbeit des Netzwerks verrichten.
+Die Anzahl der Neuronen in den Eingabe- und Ausgabeschichten ist intuitiv
+wählbar. Die Größe der Eingabeschicht wird häufig durch die Anzahl der
+möglichen Eingaben bestimmt, die Größe der Ausgabeschicht durch die Anzahl
+der möglichen Ergebnisse.
+Die Größe und Anzahl der dazwischen liegenden Schichten hingegen muss je
+nach Anforderung und Gegebenheiten individuell ermittelt werden.
+Je größer das Netzwerk desto höher sind die Anforderungen an die benötigte
+Hardware um dieses zu betreiben. Bei schwächerer Hardware oder
+Einschränkungen bezüglich der Energieversorgung können kleinere Netzwerke
+eingesetzt werden, wenn auch häufig mit geringerer Genauigkeit verglichen
+mit einem größeren Netzwerk.
 
 
+\section{Motivation}
 
-\section{weitere Unterkapitel}
+Die Größe eines Netzwerks kann beim Entwurf dessen direkt beeinflusst werden.
+In Anwendungsgebieten, bei denen der Fokus auf geringen Hardwareanforderungen
+liegt, stoßen schnell das Problem der schwindenden Genauigkeit.
+Auf IoT-Geräten oder mobilen Platformen finden klassische neuronale Netzwerke
+daher nur eingeschränkt Nutzen.
+In 2016 wurde von Courbariaux (TODO: \dots) eine Arbeit veröffentlich,
+welche das Binarisierte neuronale Netzwerk (kurz \emph{BNN}) vorstellt,
+einem neuronalen Netzwerk welches bis zu 32-mal schneller arbeiten kann
+als ein klassisches neuronales Netzwerk.
+Die Genauigkeit des BNN könne zudem mit der Genauigkeit von jenen klassischen
+Netzwerken mithalten, wenn auch mit einer leichten Verschlechterung.
+Das BNN ermöglicht dank seiner Eigenschaften den Einsatz von
+neuronalen Netzen auf vergleichsweise schwacher Hardware und verspricht zugleich
+nur geringe Genauigkeitseinbüße.
 
-$\vdots$ 
+In dieser Ausarbeitung wird die allgemeine Funktionsweise von neuronalen
+Netzwerken erläutert und anschließend der Entwurfs eines binarisiertes
+Netzwerk dokumentiert.
+Dabei werden grundlegende Überlegungen, das Vorgehen, auftretende Probleme
+sowie dazu ermittelte Lösungen vorgestellt.
