@@ -1463,6 +1463,7 @@ INPUT ./kapitel/nn.tex
 INPUT kapitel/nn.tex
 INPUT ./kapitel/nn.tex
 INPUT kapitel/nn.tex
+INPUT c:/texlive/2021/texmf-dist/fonts/tfm/public/lm/ec-lmbx12.tfm
 INPUT ./kapitel/bnn.tex
 INPUT ./kapitel/bnn.tex
 INPUT ./kapitel/bnn.tex
@@ -1529,16 +1530,13 @@ INPUT literatur/literatur.aux
 INPUT ./main.out
 INPUT ./main.out
 INPUT c:/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc
-INPUT c:/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc
 INPUT c:/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc
-INPUT c:/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc
 INPUT c:/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc
+INPUT c:/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc
 INPUT c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmbx10.pfb
 INPUT c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmbx12.pfb
 INPUT c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb
-INPUT c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmex10.pfb
 INPUT c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmmi10.pfb
-INPUT c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmmi8.pfb
 INPUT c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr10.pfb
 INPUT c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr12.pfb
 INPUT c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr8.pfb

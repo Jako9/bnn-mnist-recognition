@@ -61,7 +61,7 @@ neuronales Netzwerk aus 19 Neuronen mit insgesamt 5 Schichten.
                 }
         \end{tikzpicture}
     \end{center}
-    \caption{Neuronales Netzwerk}
+    \caption{Struktur eines neuronalen Netzwerks}
     \label{fig:Neuronales Netzwerk}
 \end{figure}
 
@@ -94,12 +94,10 @@ daher ist das Ziel beim Trainieren eines Netzes die Optimierung jener.
 
 Kantengewichte wirken sich maßgeblich auf die Wertberechnung von Neuronen aus.
 Diese wird in zwei Schritten ausgeführt. Im ersten Schritt wird aus den
-Kantengewichten ($e_{i}$) aller eingehenden Kanten und den Werten der darüber
-verbundenen Neuronen ($v_{i}$) der Wert nach Formel (2.1) gebildet.
-
-\begin{align}
-    v=\sum_{i=1}^{n}(e_{i} * v_{i})
-\end{align}
+Kantengewichten aller eingehenden Kanten und den Werten der darüber
+verbundenen Neuronen die Produktsumme gebildet.
+Für den zweiten Schritt sind jeweils Aktivierungsfunktionen notwendig, welche
+im nachfolgenden Kapitel erläutert werden.
 
 \section{Aktivierungsfunktionen}
 
@@ -108,16 +106,61 @@ modifiziert. Sogenannte \emph{Aktivierungsfunktionen} können beliebig gewählt
 werden, müssen jedoch offensichtlich alle möglichen Eingaben auf einen Wert
 abbilden können. Die verwendete Aktivierungsfunktion kann je nach
 Schicht variieren. Einmal gewählt, ist diese jedoch für die jeweilige Schicht
-im Netzwerk fest.
+im Netzwerk für die Laufzeit fest.
 
-Im Folgenden sind sind häufig verwendete Aktivierungsfunktionen und ihre Formeln
-abgebildet.
+Die beiden erläuterten Berechnungsschritte werden schichtweise in Richtung des
+Datenflusses des Netzwerks für alle Neuronen durchgeführt. Im folgenden
+Beispiel wird bildhaft dargestellt, wie solch eine Neuronenwertberechnung für
+ein Netzwerk aussieht, welche in der betrachteten Schicht die
+$tanH$-Aktivierungsfunktion verwendet.
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}[y=-1.5cm,x=1.5cm]
+        \tikzset{
+            netnode/.style={circle,draw=black,minimum size=1cm},
+            hidden/.style={dotted,thick}
+        }
+        \node[netnode] (i1) at (0,0) {0.7};
+        \node[netnode] (i2) at (0,1) {0.5};
+        \node[netnode] (i3) at (0,2) {-0.2};
+        \node[netnode] (i4) at (0,3) {-0.9};
+
+        \draw[draw=black,dotted] (-0.5,-1) rectangle ++(1,5) ++(-0.5,0) node[below] {Schicht $n$};
+        \draw[draw=black,dotted] (2,-1) rectangle ++(5,5) ++(-2.5,0) node[below] {Schicht $n+1$};
+
+        \node[netnode,minimum size=2cm,dotted,thick] (o1) at (3,1.5) [label=below:Schritt 1] {$=0.67$};
+        \node (o1l) [above of=o1,align=right,above] {$0.7\times 0.6$\\$+\ 0.5\times 0.7$\\$+\ 0.2\times 0.4$\\$-\ 0.9\times 0.2$};
+
+        \node[netnode,minimum size=2cm] (o2) at (6,1.5) [label=below:Schritt 2] {$\approx 0.585$};
+
+        \draw[->] (i1) -- node[auto] {0.6} (o1);
+        \draw[->] (i2) -- node[auto] {0.7} (o1);
+        \draw[->] (i3) -- node[auto] {-0.4} (o1);
+        \draw[->] (i4) -- node[auto] {0.2} (o1);
+        \draw[->,dotted,thick] (o1) -- node[above] {$tanH(x)$} (o2);
+    \end{tikzpicture}
+    \caption{Berechnung eines Neuronenwertes\\mit der $tanH$ Aktivierungsfunktion}
+\end{figure}
+
+Die Wahl der Aktivierungsfunktion beeinflusst die möglichen
+Werte, die Neuronen innerhalb einer Schicht annehmen können. Um eine
+Wertexplosion zu vermeiden (z.B. bei Verwendung von $ReLU(x): \max(0,x)$ als
+Aktivierungsfunktion), können zusätzliche Normalisierungsschichten verwendet
+werden, welche die Neuronenwerte einer Schicht auf einen erwünschten Zielbereich
+einschränken. Es existieren jedoch auch Aktivierungsfunktionen, die diese
+\emph{Squashing-}Eigenschaft direkt besitzen. Darunter zählt auch die im
+vorherigen Beispiel verwendetete Funktion $tanH$, bei der alle Eingaben auf den
+Zielbereich [-1,1] abgebildet werden.
+
+Im Folgenden sind sind einige, für neuronale Netzwerke übliche
+Aktivierungsfunktionen abgebildet.
 
 \begin{figure}[H]
     \begin{minipage}{0.45\textwidth}
         \begin{center}
             \begin{tikzpicture}
-                \begin{axis}[width=7cm,xmin=-5,xmax=5,ymin=0,ymax=4,thick,grid=both]
+                \begin{axis}[width=7cm,xmin=-5,xmax=5,ymin=-2,ymax=2,thick,grid=both]
                     \addplot[] {max(x,0))};
                 \end{axis}
             \end{tikzpicture}
@@ -127,7 +170,7 @@ abgebildet.
     \begin{minipage}{0.45\textwidth}
         \begin{center}
             \begin{tikzpicture}
-                \begin{axis}[width=7cm,xmin=-5,xmax=5,ymin=0,ymax=1,thick,grid=both]
+                \begin{axis}[width=7cm,xmin=-5,xmax=5,ymin=-2,ymax=2,thick,grid=both]
                     \addplot[] {1/(1+exp(-x))};
                 \end{axis}
             \end{tikzpicture}
@@ -150,19 +193,28 @@ abgebildet.
     \begin{minipage}{0.45\textwidth}
         \begin{center}
             \begin{tikzpicture}
-                \begin{axis}[width=7cm,xmin=-5,xmax=5,ymin=-1.5,ymax=1.5,thick,grid=both]
+                \begin{axis}[width=7cm,xmin=-5,xmax=5,ymin=-2,ymax=2,thick,grid=both]
                     \addplot[] {(exp(x)-exp(-x)) / (exp(x)+exp(-x))};
                 \end{axis}
             \end{tikzpicture}
         \end{center}
-        \caption{tanh}
+        \caption{tanH}
     \end{minipage}
 \end{figure}
 
-Die beiden erläuterten Berechnungsschritte werden schichtweise in Richtung des
-Datenflusses des Netzwerks für alle Neuronen durchgeführt.
-
 \section{Training}
 
-\section{Backpropagation (?)}
+Die Stärken und Schwächen eines neuronalen Netzwerks liegen neben der
+Struktur der Neuronen, der Schichten und den gewählten Aktivierungsfunktionen
+vor allem in den verwendeten Kantengewichten. Diese zu optimieren kann ein
+langwieriger und rechenintensiver Prozess sein. Kleine Änderungen im Aufbau
+des Netzwerks können große Teile von zuvor erlernten Gewichten unbrauchbar
+machen, daher werden Netzwerke häufig an sich selbst trainiert.
+Das bedeutet, dass beim Trainieren eines neuen Netzwerks die initialen
+Kantengewichte keine emprischen Daten aus anderen (ähnlichen) Netzwerk verwenden,
+sondern diese zu Beginn pseudozufällig gewählt werden.
+
+\subsection{Ablauf}
+
+\subsection{Backpropagation (?)}
 
