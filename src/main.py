@@ -19,7 +19,6 @@ import matplotlib.pyplot as plt
 class NeuralNetwork(nn.Module):
     def __init__(self):
         super(NeuralNetwork, self).__init__()
-        self.infl_ratio = 1
         self.fc1 = BinarizeLinear(784, 500)
         self.htanh1 = nn.Hardtanh()
         self.bn1 = nn.BatchNorm1d(500)
@@ -86,6 +85,9 @@ def test(model, device, test_loader):
                 total += 1
 
     print(f"Accuracy: {100 * hit / total}%")
+    f = open("../measurements/accuracy_normal.txt", "a")
+    f.write(str(100 * hit / total) + ",")
+    f.close()
     model.train()
 
 
@@ -179,10 +181,11 @@ def main():
     test(bnn, device, test_set)
 
     #exporting Weights
-    export(bnn)
+    #export(bnn)
     exportThreshold(bnn)
     print("Done!")
 
 
 if __name__ == '__main__':
-    main()
+    for x in range(MEASUREMENT_RUNS):
+        main()
