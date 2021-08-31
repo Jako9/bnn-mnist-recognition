@@ -14,5 +14,10 @@ class ProbabilityTransform(object):
             255.
 
     def __call__(self, x):
-        #print("x = " + str(x) + ", rand = " + str(random.uniform(0, self.max_val)))
-        return (x > random.uniform(0, self.max_val)).to(x.dtype)  # do not change the data type
+        #print(x.shape)
+        for i,whatevenisthis in enumerate(x): #nested hell i'm sorry
+            for j,dim1 in enumerate(whatevenisthis):
+                for k,dim2 in enumerate(dim1):
+                    x[i,j,k]= ((x[i,j,k] > random.uniform(0, self.max_val)).to(x.dtype))
+                    #print(x[i,j,k])
+        return x
