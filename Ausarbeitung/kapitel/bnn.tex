@@ -1,9 +1,12 @@
-\chapter{Das Netzwerk}
+\chapter{Das BNN}
 \section{Aktivierungsfunktion}
 %TODO HtanH im Kontext von Expolding Gradient
 \section{Binärer Linear-Layer}
 \section{BatchNorm}
-
+Die Rolle des \textit{BatchNorm-Layers} in nicht-binären Neuronalen-Netzwerken ist eine leicht andere als in unserem BNN. Durch \textit{BatchNorm} werden die Gewichte einer Schicht normalisiert. Hier wird dafür gesorgt, dass \textit{Batches} einen Mittelwert von Null und eine Standartabweichung von Eins haben.\\ %TODO Cite
+Durch diese reduzierte Streuung der Werte, können in Neuronalen Netzen höhere Lernraten verwendet werden.\\
+Bei binären Netzwerken hat dies, aufgrund der diskreten Kantengewichte, kaum einen Effekt und hat somit kaum Auswirkungen auf die verwendbare Lernrate.In BNNs erfüllt die \textit{BatchNorm} Schicht eine zentrale Rolle für das Lernen des Netzwerkes.
+%TODO Cite Mikail
 \section{Auswertung}
 Um am Ende das Ergebnis des Netzwerkes auszuwerten, müssen die Ergebnisse des letzten \textit{Linear-Layers} normalisiert werden. Diese Normalisierung entscheidet, ob ein Neuron feuert oder nicht. Für die Normalisierung der Daten wird hier die \textit{logsoftmax(x)} Funktion verwendet. Durch \textit{softmax(x)} werden die Aktivierungen der letzten Schicht so normalisiert, dass ihre Summe eins ergibt. Dies ist mit Wahrscheinlichkeiten zu vergleichen, mit der das Bild die jeweilig zugeordnete Zahl widerspiegelt. Um bessere Ergebnisse in Kombination mit der Verlustfunktion, \textit{negative log likelihood loss}, zu erzielen, wird die \textit{logsoftmax}-Funktion verwendet.\\
 Da bei der Anwendung des MNIST-Datensatzes immer nur das Neuron ausgewählt werden sollte, da immer nur eine Zahl auf einem Bild abgebildet ist, wird am bei der Auswertung über die \textit{argmax}-Funktion das aktivste Neuron ausgewählt. Dieses entspricht dann der Zahl, die am wahrscheinlichsten abgebildet ist.
@@ -26,3 +29,4 @@ Durch die binarisierung der \textit{Linear-Layer} ist zu vermuten, dass diese, i
 
 Trainiert wurde hier das gleiche Netzwerk, ein mal mit binären \textit{Linear-Layern}, das andere mal mit normalen \textit{Linear-Layer}. Jedes Netzwerk wurde für 50 Epochen trainiert, bevor die Genauigkeit ausgewertet wurde. Um sicher zu gehen, ob die Genauigkeit gegen diesen Wert konvergiert, wurde jede Messung drei mal wiederholt.\\
 Wie in Abbildung \ref{fig:linar-layer-verluste} zu sehen, leidet die Genauigkeit des Netzwerkes beachtlich unter der Binarisierung der \textit{Linear-Layer}. Der Mittelwert für das Training mit normalem \textit{Linear-Layer} ist hierbei $97,2\%$, während bei binären Schichten ein Durchschnitt von $87,6\%$ erreicht wird. Es ist klar zu sehen, dass die Einschränkung der Gewichte auf Null und Eins und der damit einhergehende Granularitätsverlust, sich stark auf die Genauigkeit des Netzwerkes, bei gleicher Größe, auswirken. 
+
