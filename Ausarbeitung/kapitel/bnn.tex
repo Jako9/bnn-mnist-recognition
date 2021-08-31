@@ -3,10 +3,20 @@
 %TODO HtanH im Kontext von Expolding Gradient
 \section{Binärer Linear-Layer}
 \section{BatchNorm}
-Die Rolle des \textit{BatchNorm-Layers} in nicht-binären Neuronalen-Netzwerken ist eine leicht andere als in unserem BNN. Durch \textit{BatchNorm} werden die Gewichte einer Schicht normalisiert. Hier wird dafür gesorgt, dass \textit{Batches} einen Mittelwert von Null und eine Standartabweichung von Eins haben.\\ %TODO Cite
+Die Rolle des \textit{BatchNorm-Layers} in nicht-binären Neuronalen-Netzwerken ist eine leicht andere als in unserem BNN. Durch \textit{BatchNorm} werden die Gewichte einer Schicht normalisiert. Hier wird dafür gesorgt, dass \textit{Batches} einen Mittelwert von Null und eine Standartabweichung von Eins haben .\\ %\cite{batchnorm}
 Durch diese reduzierte Streuung der Werte, können in Neuronalen Netzen höhere Lernraten verwendet werden.\\
-Bei binären Netzwerken hat dies, aufgrund der diskreten Kantengewichte, kaum einen Effekt und hat somit kaum Auswirkungen auf die verwendbare Lernrate.In BNNs erfüllt die \textit{BatchNorm} Schicht eine zentrale Rolle für das Lernen des Netzwerkes. Primär dient die Normalisierung der Schicht dazu, das \textit{expolding-gradient} Problem zu verhindern. Hier wird beim Training des Netzwerkes, welches die Error-Werte reduzieren soll, ein sehr hoher Error-Wert akkumuliert. Dies führt zu einer zu starken Anpassung der Gewichte, welche folgend zu einer niedrigeren Genauigkeit führt. Da durch wiederholtes auftreten die Genauigkeit stark abgesenkt wird, kann dieses Netzwerk sich, ab einer gewissen Schwelle, nicht mehr verbessern.
-%TODO Cite Mikail
+Bei binären Netzwerken hat dies, aufgrund der diskreten Kantengewichte, kaum einen Effekt und hat somit kaum Auswirkungen auf die verwendbare Lernrate.In BNNs erfüllt die \textit{BatchNorm} Schicht eine zentrale Rolle für das Lernen des Netzwerkes. Primär dient die Normalisierung der Schicht dazu, das \textit{expolding-gradient} Problem zu verhindern. Hier wird beim Training des Netzwerkes, welches die Error-Werte reduzieren soll, ein sehr hoher Error-Wert akkumuliert. Dies führt zu einer zu starken Anpassung der Gewichte, welche folgend zu einer niedrigeren Genauigkeit führt. Da durch wiederholtes auftreten die Genauigkeit stark abgesenkt wird, kann dieses Netzwerk sich, ab einer gewissen Schwelle, nicht mehr verbessern.%TODO Cite Mikail
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.7]{./bilder/_plot_batchnorm}
+	\caption{Training mit und ohne BatchNorm}
+	\label{fig:bn}
+\end{figure}\\
+Der Versuch in Abbildung \ref{fig:bn} zeigt einen Vergleich des Netzwerkes mit und ohne \textit{BatchNorm}. Hierfür wurde ein Netzwerk für 50 Epochen trainiert. nach jeder Epoche wurde die Genauigkeit getestet. Anschließend wurde weiter Trainiert. Um eine bessere Vergleichbarkeit zu erzielen, wurden die Bilder über die Schwellwert-Methode binarisiert.\\
+
+Wie in Abbildung \ref{fig:bn} zu sehen ist, performt das Netzwerk mit \textit{BatchNorm} Schicht zu jeder Trainingsdauer besser als ohne \textit{BatchNorm} Schicht. Während in den ersten 20 Epochen mit \textit{BatchNorm} ein klarer Aufwärtstrend zu erkennen ist, bleibt die Genauigkeit ohne \textit{BatchNorm} immer zwischen 79\% und 82\%. Hier sind besonders gut die starken Einbrüche nach Unten zu erkennen, die mit \textit{BN} deutlich schwächer sind. Diese zeigen besonders deutlich den starken Genauigkeitsverlust, der durch \textit{exploding gradients} verursacht wird. Die Konsequenz ist, dass eine längere Trainingsdauer keine Verbesserung des Netzwerkes mehr bedeutet, was bedeutet, dass die Konvergenz-Schwelle bei $< 82$ erreicht ist. Ab dieser Schwelle verbessert sich das Netzwerk ohne \textit{BN} nicht mehr.
+
+
 \section{Auswertung}
 Um am Ende das Ergebnis des Netzwerkes auszuwerten, müssen die Ergebnisse des letzten \textit{Linear-Layers} normalisiert werden. Diese Normalisierung entscheidet, ob ein Neuron feuert oder nicht. Für die Normalisierung der Daten wird hier die \textit{logsoftmax(x)} Funktion verwendet. Durch \textit{softmax(x)} werden die Aktivierungen der letzten Schicht so normalisiert, dass ihre Summe eins ergibt. Dies ist mit Wahrscheinlichkeiten zu vergleichen, mit der das Bild die jeweilig zugeordnete Zahl widerspiegelt. Um bessere Ergebnisse in Kombination mit der Verlustfunktion, \textit{negative log likelihood loss}, zu erzielen, wird die \textit{logsoftmax}-Funktion verwendet.\\
 Da bei der Anwendung des MNIST-Datensatzes immer nur das Neuron ausgewählt werden sollte, da immer nur eine Zahl auf einem Bild abgebildet ist, wird am bei der Auswertung über die \textit{argmax}-Funktion das aktivste Neuron ausgewählt. Dieses entspricht dann der Zahl, die am wahrscheinlichsten abgebildet ist.
