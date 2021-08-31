@@ -161,8 +161,8 @@ def main():
 
     test_data = datasets.MNIST(
         "", train=False, download=True, transform=transforms.Compose([transforms.ToTensor(),
-                                                                      ProbabilityTransform(
-                                                                          max_val=255)
+                                                                      ThresholdTransform(
+                                                                          max_val=130)
                                                                       ]))
     test_set = DataLoader(
         test_data, batch_size=args.test_batch_size, shuffle=True)
