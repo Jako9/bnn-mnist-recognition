@@ -65,7 +65,7 @@ neuronales Netzwerk aus 19 Neuronen mit insgesamt 5 Schichten.
     \label{fig:Neuronales Netzwerk}
 \end{figure}
 
-\section{Neuronen}
+\section{Neuronen}\label{sec:neuronen}
 
 Unter einem Neuron versteht sich bei neuronalen Netzen lediglich ein Knoten,
 in dem üblicherweise ein 32-bit großer Wert hinterlegt ist. Häufig kommen hier
@@ -77,7 +77,7 @@ jeweils aus den Werten aller Neuronen der direkt davor liegenden Schicht zusamme
 Das genaue Vorgehen bei der Wertermittlung hängt jeweils vom Netzwerk
 und den dort verwendeten Aktivierungsfunktionen ab.
 
-\section{Schichten und Kanten}
+\section{Schichten und Kanten}\label{sec:schichtenundkanten}
 
 In einem neuronalen Netzwerk ist jedes Neuron einer Schicht mit allen Neuronen
 der jeweiligen davor liegenden und danach liegenden Schicht über Kanten verbunden.
@@ -99,7 +99,7 @@ verbundenen Neuronen die Produktsumme gebildet.
 Für den zweiten Schritt sind jeweils Aktivierungsfunktionen notwendig, welche
 im nachfolgenden Kapitel erläutert werden.
 
-\section{Aktivierungsfunktionen}
+\section{Aktivierungsfunktionen}\label{sec:aktivierungsfunktionen}
 
 Im zweiten Schritt wird der zuvor errechnete Wert durch eine weitere Funktion
 modifiziert. Sogenannte \emph{Aktivierungsfunktionen} können beliebig gewählt
@@ -294,6 +294,7 @@ mit drei Schichten.
         \draw[->,dotted,thick] (b1) -- node[above] {$f(x)$} (b2);
         \draw[->] (b2) -- node[above] {$w_b$} (c);
     \end{tikzpicture}
+    \caption{Neuronenkette}
 \end{figure}
 
 Um herauszufinden, wie eine Änderung von $w_a$ sich auf den Wert des Neurons $c$
