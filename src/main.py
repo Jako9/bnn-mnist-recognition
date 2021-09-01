@@ -85,10 +85,11 @@ def test(model, device, test_loader):
                 total += 1
 
     print(f"Accuracy: {100 * hit / total}%")
-    f = open("../measurements/accuracy_normal.txt", "a")
-    f.write(str(100 * hit / total) + ",")
-    f.close()
+    #f = open("../measurements/learningrate_"+str(LEARNING_RATE)+".txt", "a")
+    #f.write(str(100 * hit / total) + ",")
+    #f.close()
     model.train()
+    return (100 * hit / total)
 
 
 def main():
@@ -133,25 +134,24 @@ def main():
         if(USE_PROBABILITY_TRANSFORM):
             iterationData.append(datasets.MNIST(
                 "", train=True, download=True, transform=transforms.Compose([transforms.ToTensor(),
-                                                                              ProbabilityTransform(
-                                                                                  max_val=255)
+                                                                              ProbabilityTransform()
                                                                                  ])))
         else:
             iterationData.append(datasets.MNIST(
                 "", train=True, download=True, transform=transforms.Compose([transforms.ToTensor(),
                                                                               ThresholdTransform(
-                                                                                  max_val=130)
+                                                                                  max_val=THRESHOLD)
                                                                                  ])))
 
-        if(SHOW_PROCESSED_NUMBERS):
-            for iteration in iterationData:
-                i = 0
-                for data in iteration:
-                    if(i==SELECTED_NUMBER_INDEX):
-                        break
-                    i+=1
-                plt.imshow(data[0][0].view(28,28))
-                plt.show()
+    if(SHOW_PROCESSED_NUMBERS):
+        for iteration in iterationData:
+            i = 0
+            for data in iteration:
+                if(i==SELECTED_NUMBER_INDEX):
+                    break
+                i+=1
+            plt.imshow(data[0][0].view(28,28))
+            plt.show()
 
     training_setData = []
     # Trainingsdaten einlesen
@@ -162,7 +162,8 @@ def main():
     test_data = datasets.MNIST(
         "", train=False, download=True, transform=transforms.Compose([transforms.ToTensor(),
                                                                       ThresholdTransform(
-                                                                          max_val=130)
+                                                                                  max_val=THRESHOLD)
+                                                                            
                                                                       ]))
     test_set = DataLoader(
         test_data, batch_size=args.test_batch_size, shuffle=True)
@@ -175,17 +176,24 @@ def main():
     for epoch in range(args.epochs):
         for iteration in range (0, REPETITIONS):
             train(args, bnn, training_setData[iteration], optimizer, device, epoch, iteration)
+            test(bnn,device,test_set)
             print(f"Progress: Epoch: {epoch+1}/{args.epochs}, Iteration: {iteration+1}/{REPETITIONS}")
 
     #evaluate calculated BNN
-    test(bnn, device, test_set)
+    accuracy = test(bnn, device, test_set)
 
     #exporting Weights
     #export(bnn)
     exportThreshold(bnn)
     print("Done!")
+    return accuracy
 
 
 if __name__ == '__main__':
+    accuracies = []
     for x in range(MEASUREMENT_RUNS):
-        main()
+        accuracies.append(main())
+
+    print("-----Summary-----")
+    for i,val in enumerate(accuracies):
+        print("Run " + str(i) + ": " + str(val) +"%")
