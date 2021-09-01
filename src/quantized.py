@@ -21,11 +21,12 @@ class BinarizeLinear(nn.Linear):
         if not hasattr(self.weight, 'org'):
             self.weight.org = self.weight.data.clone()
         self.weight.data = Binarize(self.weight.org)
+        if not hasattr(self.bias, 'org'):
+            self.bias.org = self.bias.data.clone()
+        self.bias.data = Binarize(self.bias.org)
         out = nn.functional.linear(input, self.weight)
         if not self.bias is None:
             self.bias.org = self.bias.data.clone()
             out += self.bias.view(1, -1).expand_as(out)
 
         return out
-
-

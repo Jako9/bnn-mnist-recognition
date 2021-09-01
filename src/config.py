@@ -1,8 +1,8 @@
 ##TRAINING
 BATCH_SIZE = 200
-LEARNING_RATE = 0.2
+LEARNING_RATE = 1.5
 STEP_SIZE = 25
-EPOCHS = 20
+EPOCHS = 1
 #-------Important for when using ProbabilityTransform-------
 #for a fair comparison between ThresholdTransform and ProbabilityTransform REPETITIONS * EPOCHS should be constant
 REPETITIONS = 1
