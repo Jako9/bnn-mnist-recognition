@@ -7,7 +7,7 @@ EPOCHS = 3
 #for a fair comparison between ThresholdTransform and ProbabilityTransform REPETITIONS * EPOCHS should be constant
 REPETITIONS = 50
 
-USE_PROBABILITY_TRANSFORM = True
+USE_PROBABILITY_TRANSFORM = False
 
 #Threshold for a 1 when not using ProbabilityTransform
 THRESHOLD = 150
