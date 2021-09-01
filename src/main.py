@@ -163,7 +163,7 @@ def main():
         "", train=False, download=True, transform=transforms.Compose([transforms.ToTensor(),
                                                                       ThresholdTransform(
                                                                                   max_val=THRESHOLD)
-                                                                            
+
                                                                       ]))
     test_set = DataLoader(
         test_data, batch_size=args.test_batch_size, shuffle=True)
@@ -183,7 +183,7 @@ def main():
     accuracy = test(bnn, device, test_set)
 
     #exporting Weights
-    #export(bnn)
+    export(bnn)
     exportThreshold(bnn)
     print("Done!")
     return accuracy
