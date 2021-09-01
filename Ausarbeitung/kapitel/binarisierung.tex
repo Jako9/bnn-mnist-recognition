@@ -6,7 +6,7 @@ Unsere Aufgabe bei der Binarisierung ist es also mit möglichst wenig Informatio
 
 \subsection{Threshold}
 
-Im Folgenden betrachten wir den Wertebereich der Pixel als zwischen $\{0-255\}$ liegend.\\Der erste Ansatz für eine Binarisierungsfunktion waren Thresholds. Diese Funktion flippt für eine fest gewähltes $n \in \{0..255\}$ alle Bits, die den Schwellenwert $n$ überschreiten auf $1$ und alle anderen auf $0$.\\
+Im Folgenden betrachten wir den Wertebereich der Pixel als zwischen $\{0-255\}$ liegend.\\Der erste Ansatz für eine Binarisierungsfunktion waren Thresholds. Diese Funktion flippt für ein fest gewähltes $n \in \{0..255\}$ alle Bits, die den Schwellenwert $n$ überschreiten, auf $1$ und alle anderen auf $0$.\\
 
 Der Vorteil dieser Methode ist, dass man eine sehr kostengünstige Binarisierung erhält. Man kann durch das fest gewählte $n$ die \textit{Inbuild}-Tensor-Funktionen verwenden und muss nicht manuell über die einzelnen Pixel iterieren. Dies ist vorallem wichtig, da man mit $30.000$ Bildern je $28 \times 28$ Pixeln sehr viele Binarisierungsschritte erhält.\\
 
@@ -45,9 +45,9 @@ In diesem Vergleich sieht man sehr gut, dass ein Threshold, der für ein Bild zu
 
 Eine Lösung für dieses Problem bietet die \textit{Probability-Transformation}. Bei dieser Methode betrachten wir den Wert eines einzelnen Pixels als die Warscheinlichkeit, dass dieser Pixel in der Binarisierung mit $1$ belegt wird.\\
 
-Nachteil dieser Methode ist die Effizienz. Da wir nun nicht mehr mit einem statischen Threshold arbeiten, müssen wir manuell über die Pixel iterieren. Dabei verschlechtern wir uns im Zeitlichen um einen Faktor $20$. Somit ist das Trainieren mit der \textit{Probability-Transformation} deutlich teurer. Einen wichtigen Geschwindigkeitsboost hat die Umwandlung des Pixeltensors in einen \textit{Numpy-Array} gegeben. Über diesen zu bearbeiten ist $~6$ mal effizienter als einen Tensor zu bearbeiten.\\
+Nachteil dieser Methode ist die Effizienz. Da wir nun nicht mehr mit einem statischen Threshold arbeiten, müssen wir manuell über die Pixel iterieren. Dabei verschlechtern wir uns im Zeitlichen um einen Faktor $20$. Somit ist das Trainieren mit der \textit{Probability-Transformation} deutlich teurer. Einen wichtigen Geschwindigkeitsboost hat die Umwandlung des Pixeltensors in einen \textit{Numpy-Array} gegeben. Diesen zu bearbeiten ist $~6$ mal effizienter als einen Tensor zu bearbeiten.\\
 
-Der große Vorteil dieser Methode ist jedoch die Informationserhaltung. Wir arbeiten bei der \textit{Probability-Transformation} mit sogenannten \textit{Repetitions}. Diese durchlaufen die gleiche Generation mit dem gleichen \textit{Trainingset}, welches jedoch neu binarisiert wurden. Das heißt, dass man bei 50 Repetitions jede Generation 50 mal, mit 50 unabhängig binarisierten \textit{Trainginsets}.\\Dadurch erhalten wir ein Mittel für jedes Bild, welches gegen die Originalversion konvergiert. (Siehe Abbildung 5.5 bzw 5.6)
+Der große Vorteil dieser Methode ist jedoch die Informationserhaltung. Wir arbeiten bei der \textit{Probability-Transformation} mit sogenannten \textit{Repetitions}. Diese durchlaufen die gleiche Generation mit dem gleichen \textit{Trainingset}, welche jedoch neu binarisiert wurden. Das heißt, dass man bei 50 Repetitions jede Generation 50 mal, mit 50 unabhängig binarisierten \textit{Trainginsets} durchläuft.\\Dadurch erhalten wir ein Mittel für jedes Bild, welches gegen die Originalversion konvergiert. (Siehe Abbildung 5.5 bzw 5.6)
 
 \begin{figure}[h]
 \centering
