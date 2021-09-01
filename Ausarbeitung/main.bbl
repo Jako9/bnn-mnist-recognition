@@ -18,7 +18,7 @@
 
 
 \refsection{0}
-  \datalist[entry]{nty/global//global/global}
+  \datalist[entry]{anyt/global//global/global}
     \entry{Courbariaux}{article}{}
       \name{author}{2}{}{%
         {{hash=7a98eed4defbfe02de3efa44a521cf90}{%
@@ -38,6 +38,7 @@
       \strng{authorbibnamehash}{ea7490a94f105e596ca40b93cb783a72}
       \strng{authornamehash}{ea7490a94f105e596ca40b93cb783a72}
       \strng{authorfullhash}{ea7490a94f105e596ca40b93cb783a72}
+      \field{labelalpha}{CB16}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{labelnamesource}{author}
@@ -97,6 +98,7 @@
       \strng{editorbibnamehash}{4188f673e8c288b53fdbccdd66b77f3f}
       \strng{editornamehash}{4188f673e8c288b53fdbccdd66b77f3f}
       \strng{editorfullhash}{4188f673e8c288b53fdbccdd66b77f3f}
+      \field{labelalpha}{IS15}
       \field{sortinit}{I}
       \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
       \field{labelnamesource}{author}
@@ -116,6 +118,133 @@
       \endverb
       \verb{url}
       \verb https://proceedings.mlr.press/v37/ioffe15.html
+      \endverb
+    \endentry
+    \entry{DBLP:journals/corr/abs-2012-00938}{article}{}
+      \name{author}{4}{}{%
+        {{hash=d23e4a52af713c1b224da5e110e7c382}{%
+           family={Kim},
+           familyi={K\bibinitperiod},
+           given={Hyungjun},
+           giveni={H\bibinitperiod}}}%
+        {{hash=9ec85c0f19c57f829b2604a830cf1cd5}{%
+           family={Park},
+           familyi={P\bibinitperiod},
+           given={Jihoon},
+           giveni={J\bibinitperiod}}}%
+        {{hash=1f23b719334a2b3f42bf4c3e41ee4b2d}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Changhun},
+           giveni={C\bibinitperiod}}}%
+        {{hash=1f9c41b149f0117ae9ec9da493444990}{%
+           family={Kim},
+           familyi={K\bibinitperiod},
+           given={Jae{-}Joon},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{6b7c44de9c4c8f5c79d09de752086091}
+      \strng{fullhash}{0ff9c45924b0d7a0543cdd1f970739ed}
+      \strng{bibnamehash}{6b7c44de9c4c8f5c79d09de752086091}
+      \strng{authorbibnamehash}{6b7c44de9c4c8f5c79d09de752086091}
+      \strng{authornamehash}{6b7c44de9c4c8f5c79d09de752086091}
+      \strng{authorfullhash}{0ff9c45924b0d7a0543cdd1f970739ed}
+      \field{labelalpha}{Kim+20}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{CoRR}
+      \field{title}{Improving Accuracy of Binary Neural Networks using Unbalanced Activation Distribution}
+      \field{volume}{abs/2012.00938}
+      \field{year}{2020}
+      \verb{eprint}
+      \verb 2012.00938
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2012.00938
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2012.00938
+      \endverb
+    \endentry
+    \entry{DBLP:journals/corr/abs-1909-09139}{article}{}
+      \name{author}{3}{}{%
+        {{hash=0b9076029e47d507b18fc4311cd00bab}{%
+           family={Sari},
+           familyi={S\bibinitperiod},
+           given={Eyyüb},
+           giveni={E\bibinitperiod}}}%
+        {{hash=c6db29f4c5696896e769185f7164fa78}{%
+           family={Belbahri},
+           familyi={B\bibinitperiod},
+           given={Mouloud},
+           giveni={M\bibinitperiod}}}%
+        {{hash=ab7a46ca7a788b6e7e5454a32e2b7075}{%
+           family={Nia},
+           familyi={N\bibinitperiod},
+           given={Vahid\bibnamedelima Partovi},
+           giveni={V\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \strng{namehash}{486f867ca638ed6f97a945e7c9f728cc}
+      \strng{fullhash}{486f867ca638ed6f97a945e7c9f728cc}
+      \strng{bibnamehash}{486f867ca638ed6f97a945e7c9f728cc}
+      \strng{authorbibnamehash}{486f867ca638ed6f97a945e7c9f728cc}
+      \strng{authornamehash}{486f867ca638ed6f97a945e7c9f728cc}
+      \strng{authorfullhash}{486f867ca638ed6f97a945e7c9f728cc}
+      \field{labelalpha}{SBN19}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{CoRR}
+      \field{title}{A Study on Binary Neural Networks Initialization}
+      \field{volume}{abs/1909.09139}
+      \field{year}{2019}
+      \verb{eprint}
+      \verb 1909.09139
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/1909.09139
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/1909.09139
+      \endverb
+    \endentry
+    \entry{smith2018}{article}{}
+      \name{author}{1}{}{%
+        {{hash=eb6a39a428446862c3179c02093cb54c}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Leslie\bibnamedelima N.},
+           giveni={L\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
+      }
+      \strng{namehash}{eb6a39a428446862c3179c02093cb54c}
+      \strng{fullhash}{eb6a39a428446862c3179c02093cb54c}
+      \strng{bibnamehash}{eb6a39a428446862c3179c02093cb54c}
+      \strng{authorbibnamehash}{eb6a39a428446862c3179c02093cb54c}
+      \strng{authornamehash}{eb6a39a428446862c3179c02093cb54c}
+      \strng{authorfullhash}{eb6a39a428446862c3179c02093cb54c}
+      \field{labelalpha}{Smi18}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{CoRR}
+      \field{title}{A disciplined approach to neural network hyper-parameters: Part 1 - learning rate, batch size, momentum, and weight decay}
+      \field{volume}{abs/1803.09820}
+      \field{year}{2018}
+      \verb{eprint}
+      \verb 1803.09820
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/1803.09820
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/1803.09820
       \endverb
     \endentry
   \enddatalist

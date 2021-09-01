@@ -1,11 +1,53 @@
 \chapter{Das BNN}
+Bei unserem Neuronalen Netz handelt es sich um ein binäres Netzwerk. Im folgenden werden die Anpassungen, beziehungsweise die verwendeten Komponenten beschrieben.
 \section{Aktivierungsfunktion}
-%TODO HtanH im Kontext von Expolding Gradient
+In Neuronalen-Netzwerken kann, wie in Kapitel \ref{sec:activation} beschrieben, eine ganze Reihe von Aktivierungsfunktionen verwendet werden. Jede dieser Funktionen hat, je nach Anwendungskontext, verschiedene Vor- und Nacheile.\\
+Für BNNs ist hier die $sign(x)$ Funktion eine populäre Wahl.
+\begin{figure}[h]
+	\centering
+		\begin{tikzpicture}[]
+	\begin{axis}[
+	axis lines=middle,
+	xlabel=$x$,
+	ylabel={$sign(x)$},
+	xmin=-3, xmax=3,
+	ymin=-1.5, ymax=1.5,
+	ytick={0, 1},
+	extra y ticks={-1},
+	extra y tick style={
+		tick label style={anchor=west, xshift=3pt},
+	},
+	function line/.style={
+		red,
+		thick,
+		samples=2,
+	},
+	single dot/.style={
+		red,
+		mark=*,
+	},
+	empty point/.style={
+		only marks,
+		mark=*,
+		mark options={fill=white, draw=black},
+	}
+	]
+	\addplot[function line, domain=\pgfkeysvalueof{/pgfplots/xmin}:0] {-1};
+	\addplot[function line, domain=0:\pgfkeysvalueof{/pgfplots/xmax}] {1};
+	\addplot[single dot] coordinates {(0, 0)};
+	\addplot[empty point] coordinates {(0, -1) (0, 1)};
+	\end{axis}
+	\end{tikzpicture}
+	\caption{Die Vorzeichenfunktion}
+	\label{fig:sign}
+\end{figure} 
+Diese überführt die Aktivierungen direkt in binäre Werte. Da für die \textit{backpropagation} allerdings die Ableitung der Aktivierungsfunktion benötigt wird und die Vorzeichenfunktion nicht stetig differenzierbar ist, wird diese oft approximiert. In unserem Netzwerk wird sie, wie häufig verwendet, durch die \textit{hard tanH} Funktion approximiert \cite{DBLP:journals/corr/abs-2012-00938}. Diese ist günstiger zu berechnen als die Funktion \textit{tanH} und ist bei Werten $x\leq-1 \vee x \geq 1$ gleich zur Vorzeichenfunktion.
 \section{Binärer Linear-Layer}
 \section{BatchNorm}
 Die Rolle des \textit{BatchNorm-Layers} in nicht-binären Neuronalen-Netzwerken ist eine leicht andere als in unserem BNN. Durch \textit{BatchNorm} werden die Gewichte einer Schicht normalisiert. Hier wird dafür gesorgt, dass \textit{Batches} einen Mittelwert von Null und eine Standartabweichung von Eins haben\cite{batchnorm} .\\ 
 Durch diese reduzierte Streuung der Werte, können in Neuronalen Netzen höhere Lernraten verwendet werden.\\
-Bei binären Netzwerken hat dies, aufgrund der diskreten Kantengewichte, kaum einen Effekt und hat somit kaum Auswirkungen auf die verwendbare Lernrate.In BNNs erfüllt die \textit{BatchNorm} Schicht eine zentrale Rolle für das Lernen des Netzwerkes. Primär dient die Normalisierung der Schicht dazu, das \textit{expolding-gradient} Problem zu verhindern. Hier wird beim Training des Netzwerkes, welches die Error-Werte reduzieren soll, ein sehr hoher Error-Wert akkumuliert. Dies führt zu einer zu starken Anpassung der Gewichte, welche folgend zu einer niedrigeren Genauigkeit führt. Da durch wiederholtes auftreten die Genauigkeit stark abgesenkt wird, kann dieses Netzwerk sich, ab einer gewissen Schwelle, nicht mehr verbessern.%TODO Cite Mikail
+Bei binären Netzwerken hat dies, aufgrund der diskreten Kantengewichte, kaum einen Effekt und hat somit kaum Auswirkungen auf die verwendbare Lernrate.In BNNs erfüllt die \textit{BatchNorm} Schicht eine zentrale Rolle für das Lernen des Netzwerkes. Primär dient die Normalisierung der Schicht dazu, das \textit{expolding-gradient} Problem zu verhindern. Hier wird beim Training des Netzwerkes, welches die Error-Werte reduzieren soll, ein sehr hoher Error-Wert akkumuliert. Dies führt zu einer zu starken Anpassung der Gewichte, welche folgend zu einer niedrigeren Genauigkeit führt\cite{DBLP:journals/corr/abs-1909-09139}.\\
+ Da durch wiederholtes auftreten die Genauigkeit stark abgesenkt wird, kann dieses Netzwerk sich, ab einer gewissen Schwelle, nicht mehr verbessern.
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.7]{./bilder/_plot_batchnorm}
@@ -17,11 +59,11 @@ Der Versuch in Abbildung \ref{fig:bn} zeigt einen Vergleich des Netzwerkes mit u
 Wie in Abbildung \ref{fig:bn} zu sehen ist, performt das Netzwerk mit \textit{BatchNorm} Schicht zu jeder Trainingsdauer besser als ohne \textit{BatchNorm} Schicht. Während in den ersten 20 Epochen mit \textit{BatchNorm} ein klarer Aufwärtstrend zu erkennen ist, bleibt die Genauigkeit ohne \textit{BatchNorm} immer zwischen 79\% und 82\%. Hier sind besonders gut die starken Einbrüche nach Unten zu erkennen, die mit \textit{BN} deutlich schwächer sind. Diese zeigen besonders deutlich den starken Genauigkeitsverlust, der durch \textit{exploding gradients} verursacht wird. Die Konsequenz ist, dass eine längere Trainingsdauer keine Verbesserung des Netzwerkes mehr bedeutet, was bedeutet, dass die Konvergenz-Schwelle bei $< 82$ erreicht ist. Ab dieser Schwelle verbessert sich das Netzwerk ohne \textit{BN} nicht mehr.
 
 
-\section{Auswertung}
+\section{Auswertung der letzten Schicht}
 Um am Ende das Ergebnis des Netzwerkes auszuwerten, müssen die Ergebnisse des letzten \textit{Linear-Layers} normalisiert werden. Diese Normalisierung entscheidet, ob ein Neuron feuert oder nicht. Für die Normalisierung der Daten wird hier die \textit{logsoftmax(x)} Funktion verwendet. Durch \textit{softmax(x)} werden die Aktivierungen der letzten Schicht so normalisiert, dass ihre Summe eins ergibt. Dies ist mit Wahrscheinlichkeiten zu vergleichen, mit der das Bild die jeweilig zugeordnete Zahl widerspiegelt. Um bessere Ergebnisse in Kombination mit der Verlustfunktion, \textit{negative log likelihood loss}, zu erzielen, wird die \textit{logsoftmax}-Funktion verwendet.\\
-Da bei der Anwendung des MNIST-Datensatzes immer nur das Neuron ausgewählt werden sollte, da immer nur eine Zahl auf einem Bild abgebildet ist, wird am bei der Auswertung über die \textit{argmax}-Funktion das aktivste Neuron ausgewählt. Dieses entspricht dann der Zahl, die am wahrscheinlichsten abgebildet ist.
+Da bei der Anwendung des MNIST-Datensatzes immer nur das Neuron ausgewählt werden sollte, da immer nur eine Zahl auf einem Bild abgebildet ist, wird bei der Auswertung über die \textit{argmax}-Funktion das aktivste Neuron ausgewählt. Dieses entspricht dann der Zahl, die am wahrscheinlichsten abgebildet ist.
 
-\subsection{logsoftmax vs. softmax}
+
 \section{Verluste durch binäre Linear-Layer}
 Durch die binarisierung der \textit{Linear-Layer} ist zu vermuten, dass diese, im Vergleich zu normalen \textit{Linear-Layer}, etwas schlechter performen. Dies ist der Fall, da die Anzahl der möglichen Kantengewichte stark, auf Null und Eins, eingeschränkt ist. 
 \begin{figure}[h]
