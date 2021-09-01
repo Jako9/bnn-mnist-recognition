@@ -176,7 +176,7 @@ def main():
     for epoch in range(args.epochs):
         for iteration in range (0, REPETITIONS):
             train(args, bnn, training_setData[iteration], optimizer, device, epoch, iteration)
-            test(bnn,device,test_set)
+            #test(bnn,device,test_set)
             print(f"Progress: Epoch: {epoch+1}/{args.epochs}, Iteration: {iteration+1}/{REPETITIONS}")
 
     #evaluate calculated BNN
