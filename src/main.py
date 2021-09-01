@@ -85,7 +85,7 @@ def test(model, device, test_loader):
                 total += 1
 
     print(f"Accuracy: {100 * hit / total}%")
-    #f = open("../measurements/accuracy_normal.txt", "a")
+    #f = open("../measurements/learningrate_"+str(LEARNING_RATE)+".txt", "a")
     #f.write(str(100 * hit / total) + ",")
     #f.close()
     model.train()
@@ -161,7 +161,9 @@ def main():
 
     test_data = datasets.MNIST(
         "", train=False, download=True, transform=transforms.Compose([transforms.ToTensor(),
-                                                                      ProbabilityTransform()
+                                                                      ThresholdTransform(
+                                                                                  max_val=THRESHOLD)
+                                                                            
                                                                       ]))
     test_set = DataLoader(
         test_data, batch_size=args.test_batch_size, shuffle=True)
@@ -174,6 +176,7 @@ def main():
     for epoch in range(args.epochs):
         for iteration in range (0, REPETITIONS):
             train(args, bnn, training_setData[iteration], optimizer, device, epoch, iteration)
+            test(bnn,device,test_set)
             print(f"Progress: Epoch: {epoch+1}/{args.epochs}, Iteration: {iteration+1}/{REPETITIONS}")
 
     #evaluate calculated BNN
