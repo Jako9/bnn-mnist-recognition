@@ -130,7 +130,7 @@ $tanH$-Aktivierungsfunktion verwendet.
         \draw[draw=black,dotted] (2,-1) rectangle ++(5,5) ++(-2.5,0) node[below] {Schicht $n+1$};
 
         \node[netnode,minimum size=2cm,dotted,thick] (o1) at (3,1.5) [label=below:Schritt 1] {$=0.67$};
-        \node (o1l) [above of=o1,align=right,above] {$0.7\times 0.6$\\$+\ 0.5\times 0.7$\\$+\ 0.2\times 0.4$\\$-\ 0.9\times 0.2$};
+        \node (o1l) [above of=o1,align=right,above] {$0.7\cdot 0.6$\\$+\ 0.5\cdot 0.7$\\$+\ 0.2\cdot 0.4$\\$-\ 0.9\cdot 0.2$};
 
         \node[netnode,minimum size=2cm] (o2) at (6,1.5) [label=below:Schritt 2] {$\approx 0.585$};
 
@@ -269,10 +269,41 @@ Es stellt sich nun die Frage, ob und wie errechnet werden kann, welches
 Kantengewicht wie angepasst werden muss, um den Fehler zu verringern.
 Der Begriff der \emph{Backpropagation} beschreibt das Durchlaufen des Netzwerks,
 jedoch entgegen der eigentlichen Laufrichtung und das Rückschließen der
-notwendigen Gewichtsanpassung, um die Ausgabe in die gewünschte Richtung zu
-verändern.
+notwendigen Gewichtsanpassung, um die aktuelle Ausgabe in die gewünschte
+Richtung zu verändern.
 
-Bevor der genaue Wert für eine einzige Anpassung ermittelt werden kann, muss
-die Entwicklungsrichtung des Fehlers bei Änderung des Kantengewichts errechnet
-werden.
+Um eine Anpassung an einem Kantengewicht vorzunehmen, muss demnach zuerst
+festgestellt werden, wie der Ausgabewert sich bei einer Änderung des Gewichts
+verhält.
 
+Abbildung zeigt einen Ausschnitt aus einem einfachen neuronalen Netzwerk
+mit drei Schichten.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[x=3cm]
+        \tikzset{
+            netnode/.style={circle,draw=black,minimum size=1cm},
+        }
+        \node[netnode] (a) at(0,0) {$a$};
+        \node[netnode,dotted,thick] (b1) at(1,0) {$b_{(1/2)}$};
+        \node[netnode] (b2) at(2,0) {$b_{(2/2)}$};
+        \node[netnode] (c) at(3,0) {$c$};
+
+        \draw[->] (a) -- node[above] {$w_a$} (b1);
+        \draw[->,dotted,thick] (b1) -- node[above] {$f(x)$} (b2);
+        \draw[->] (b2) -- node[above] {$w_b$} (c);
+    \end{tikzpicture}
+\end{figure}
+
+Um herauszufinden, wie eine Änderung von $w_a$ sich auf den Wert des Neurons $c$
+auswirkt, kann die \emph{Chainingeigenschaft} genutzt werden (TODO: cite).
+Diese kann leicht gezeigt werden, denn es gilt:
+
+\begin{align*}
+    c         & = b_{(2/2)}\cdot w_b \\
+    b_{(2/2)} & = f(b_{(1/2)})       \\
+    b_{(1/2)} & = a\cdot w_a
+\end{align*}
+
+(TODO: berechnung)
