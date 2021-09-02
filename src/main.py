@@ -85,9 +85,9 @@ def test(model, device, test_loader):
                 total += 1
 
     print(f"Accuracy: {100 * hit / total}%")
-    #f = open("../measurements/learningrate_"+str(LEARNING_RATE)+".txt", "a")
-    #f.write(str(100 * hit / total) + ",")
-    #f.close()
+    f = open("../measurements/batchsize_"+str(BATCH_SIZE)+".txt", "a")
+    f.write(str(100 * hit / total) + ",")
+    f.close()
     model.train()
     return (100 * hit / total)
 
@@ -176,15 +176,15 @@ def main():
     for epoch in range(args.epochs):
         for iteration in range (0, REPETITIONS):
             train(args, bnn, training_setData[iteration], optimizer, device, epoch, iteration)
-            #test(bnn,device,test_set)
+            test(bnn,device,test_set)
             print(f"Progress: Epoch: {epoch+1}/{args.epochs}, Iteration: {iteration+1}/{REPETITIONS}")
 
     #evaluate calculated BNN
     accuracy = test(bnn, device, test_set)
 
     #exporting Weights
-    export(bnn)
-    exportThreshold(bnn)
+    #export(bnn)
+    #exportThreshold(bnn)
     print("Done!")
     return accuracy
 
