@@ -85,9 +85,9 @@ def test(model, device, test_loader):
                 total += 1
 
     print(f"Accuracy: {100 * hit / total}%")
-    #f = open("../measurements/learningrate_"+str(LEARNING_RATE)+".txt", "a")
-    #f.write(str(100 * hit / total) + ",")
-    #f.close()
+    f = open("../measurements/batchsize_"+str(BATCH_SIZE)+".txt", "a")
+    f.write(str(100 * hit / total) + ",")
+    f.close()
     model.train()
     return (100 * hit / total)
 

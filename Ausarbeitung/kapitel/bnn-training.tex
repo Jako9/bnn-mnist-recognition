@@ -11,3 +11,10 @@ Als \textit{undefitting} bezeichnet man eine zu geringe Anpassungsfähigkeit des
 	\label{fig:learningrate}
 \end{figure}
 Zur Ermittlung der optimalen Lernrate haben wir unser Netzwerk für 20 Epochen mit verschiedenen Lernraten trainieren lassen. In Abbildung \ref{fig:learningrate} sind die Ergebnisse mit einer Messung der Genauigkeit nach jeder Epoche dargestellt. Bei einer Lernrate von 5 ist deutlich das \textit{overfitting} ab Generation 17 zu erkennen. Hier werden zu starke Anpassungen vorgenommen, weshalb sich die Genauigkeit vom Optimum entfernt. Lernraten unter Eins hingegen nähern sich dem Optimum erst gar nicht genug an. Die Lernraten 1 und $1,5$ liefern hier die besten Ergebnisse. Da das Training mit einer Rate von $1,5$ weniger große Ausschläge zeigt, wurde sich für diese Lernrate entschieden.
+\section{Batchgröße}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.9]{./bilder/batchsize_measurement}
+	\caption{Training mit verschiedenen Batchgrößen}
+	\label{fig:batchsize}
+\end{figure}
