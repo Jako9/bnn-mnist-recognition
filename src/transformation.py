@@ -1,6 +1,9 @@
 import random
 import torch
 import numpy as np
+import time
+#pip install numba
+from numba import njit
 
 class ThresholdTransform(object):
     def __init__(self, max_val):
@@ -14,9 +17,12 @@ class ProbabilityTransform(object):
 
     def __call__(self, x):
         binarizedPicture = x.numpy()
-        for i,dim1 in enumerate(binarizedPicture[0]):
-            for j,dim2 in enumerate(dim1):
-                binarizedPicture[0,i,j]= dim2 > random.uniform(0, 1)
+        return torch.Tensor(fastBinarization(binarizedPicture))
 
-        #print(binarizedPicture)
-        return torch.Tensor(binarizedPicture)
+
+@njit()
+def fastBinarization(binarizedPicture):
+    for i,dim1 in enumerate(binarizedPicture[0]):
+        for j,dim2 in enumerate(dim1):
+            binarizedPicture[0,i,j] = dim2 > random.uniform(0, 1)
+    return binarizedPicture

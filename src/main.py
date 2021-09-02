@@ -176,15 +176,14 @@ def main():
     for epoch in range(args.epochs):
         for iteration in range (0, REPETITIONS):
             train(args, bnn, training_setData[iteration], optimizer, device, epoch, iteration)
-            test(bnn,device,test_set)
             print(f"Progress: Epoch: {epoch+1}/{args.epochs}, Iteration: {iteration+1}/{REPETITIONS}")
 
     #evaluate calculated BNN
     accuracy = test(bnn, device, test_set)
 
     #exporting Weights
-    export(bnn)
-    exportThreshold(bnn)
+    #export(bnn)
+    #exportThreshold(bnn)
     print("Done!")
     return accuracy
 
@@ -194,6 +193,19 @@ if __name__ == '__main__':
     for x in range(MEASUREMENT_RUNS):
         accuracies.append(main())
 
+    USE_PROBABILITY_TRANSFORM = True
+    REPETITIONS = 30
+    EPOCHS = 20
+    accuracies.append(0)
+
+    for x in range(MEASUREMENT_RUNS):
+        accuracies.append(main())
+
     print("-----Summary-----")
-    for i,val in enumerate(accuracies):
+    i = 0
+    for val in accuracies:
+        if(val == 0):
+            print("---Prob---")
+            continue
         print("Run " + str(i) + ": " + str(val) +"%")
+        i += 1
