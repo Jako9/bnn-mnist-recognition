@@ -12,9 +12,27 @@ Als \textit{undefitting} bezeichnet man eine zu geringe Anpassungsfähigkeit des
 \end{figure}
 Zur Ermittlung der optimalen Lernrate haben wir unser Netzwerk für 20 Epochen mit verschiedenen Lernraten trainieren lassen. In Abbildung \ref{fig:learningrate} sind die Ergebnisse mit einer Messung der Genauigkeit nach jeder Epoche dargestellt. Bei einer Lernrate von 5 ist deutlich das \textit{overfitting} ab Generation 17 zu erkennen. Hier werden zu starke Anpassungen vorgenommen, weshalb sich die Genauigkeit vom Optimum entfernt. Lernraten unter Eins hingegen nähern sich dem Optimum erst gar nicht genug an. Die Lernraten 1 und $1,5$ liefern hier die besten Ergebnisse. Da das Training mit einer Rate von $1,5$ weniger große Ausschläge zeigt, wurde sich für diese Lernrate entschieden.
 \section{Batchgröße}
+Die Batchgröße hat Einfluss auf mehrere Punkte des Netzwerkes. Zum Einen entscheidet sie, wie viele Daten durch das Netzwerk laufen, bevor der Error gemessen wird und die Gewichte aktualisiert werden. Zum Anderen wirkt sich dies auf die BatchNorm Schicht aus. Je größer hier die Batchgröße ist, desto stärker ist die Normalisierung durch die BatchNorm.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.9]{./bilder/batchsize_measurement}
 	\caption{Training mit verschiedenen Batchgrößen}
 	\label{fig:batchsize}
 \end{figure}
+In Abbildung \ref{fig:batchsize} zu sehen ist das immer gleiche Netzwerk, lediglich mit angepasster Batchgröße. Dieses Netzwerk wurde für 20 Epochen beobachtet.\\
+Auffällig ist die stark ausschlagende Kurve bei einer Batchgröße von 10. Hier ist der Wert zu gering, weshalb der Error oft berechnet wird. Da außerdem wenig über die BatchNorm normalisiert wird, kommt es zu hohen Error-Werten und starken und häufigen Anpassungen des Netzwerkes.\\
+Bei einer Batchgröße $\geq 500$ sind weniger starke Ausschläge zu beobachten. Allerdings ist hier zu beobachten, dass das Netzwerk nicht mehr so Effizient trainiert wie bei kleineren Batchgrößen. Hier könnte die Normalisierung und damit die Generalisierung bereits zu stark sein. Außerdem wird hier der Error wesentlich seltener berechnet und das Netzwerk ist somit wesentlich unagiler. Es kommt zum \textit{underfitting}.\\
+Bei Batchgrößen 50-200 ist keine besondere Abweichung zu erkennen, wobei 50 und 100 am besten performen.
+\begin{figure}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c|c|}\hline
+		Batchgröße&10&50&100&150&200&500&1000\\\hline
+		Zeit (s)&30,68&11,33&8,76&7,95&7,63&6,66&6,39\\\hline
+	\end{tabular}
+	\caption{Zeit pro Epoche für verschiedene Batchgrößen }
+	\label{fig:batchsize_time}
+\end{figure}
+Ein weiterer, praxisrelevanter, Faktor ist, dass das Training mit größeren Batchgrößen schneller geht. Da mehr Daten parallel bearbeitet werden, ist die gleiche Anzahl an Daten schneller abgearbeitet. In Abbildung \ref{fig:batchsize_time} sind die Zeiten für eine einzige Epoche, abhängig von der jeweiligen Batchgröße, gelistet. Es ist zu erkennen, dass besonders kleine Batchgrößen bei einer Erhöhung Zeiteinsparungspotential haben. Da die Werte 50-200 bei der Genauigkeit am besten abgeschnitten haben und $t(100)-t(50) <t(200)-t(100)$, ist hier die Laufzeitverbesserung von 50 auf 100 eine Sinnvolle Einsparung. Bei Batchgrößen $\geq 150$ lohnt sich die marginale Zeiteinsparung im Vergleich zur schlechteren Genauigkeit nicht mehr.\\
+Deshalb haben wir uns für ein Batchgröße von 100 zur optimalen Werteberechnung entschieden.
+
