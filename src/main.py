@@ -1,6 +1,7 @@
 import torch
 import argparse
 import torchvision
+import time
 import torch.nn.functional as F
 from torch import nn
 import torch.optim as optim
@@ -175,7 +176,7 @@ def main():
 
     for epoch in range(args.epochs):
         for iteration in range (0, REPETITIONS):
-            train(args, bnn, training_setData[iteration], optimizer, device, epoch, iteration)
+            train(args, bnn, training_setData[iteration], optimizer, device, epoch, iteration)            
             print(f"Progress: Epoch: {epoch+1}/{args.epochs}, Iteration: {iteration+1}/{REPETITIONS}")
 
     #evaluate calculated BNN
@@ -192,14 +193,7 @@ if __name__ == '__main__':
     accuracies = []
     for x in range(MEASUREMENT_RUNS):
         accuracies.append(main())
-
-    USE_PROBABILITY_TRANSFORM = True
-    REPETITIONS = 30
-    EPOCHS = 20
     accuracies.append(0)
-
-    for x in range(MEASUREMENT_RUNS):
-        accuracies.append(main())
 
     print("-----Summary-----")
     i = 0
