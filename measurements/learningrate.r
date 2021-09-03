@@ -5,12 +5,12 @@ lr_1_5 = read.csv("learningrate_1.5.csv", header = FALSE,check.names=FALSE)
 lr_5 = read.csv("learningrate_5.csv", header = FALSE,check.names=FALSE)
 xs <- seq(1,21)
 print(data_bn)
-
-plot(x = xs,y = lr_0_5,type="l",col="red",ylim=c(84,88),xlab = "Epoche",ylab = "Genauigkeit")
+par(bg=NA)
+plot(x = xs,y = lr_0_5,type="l",col="red",ylim=c(84,88),xlab = "epoch",ylab = "accuracy (%)")
 lines(x = xs,y = lr_1,col="blue")
 lines(x = xs,y = lr_1_5,col="black")
 lines(x = xs,y = lr_5,col="chartreuse4")
 lines(x = xs,y = lr_0_2,col="orange")
 #text(locator(), labels = c("BNN mit BN", "BNN ohne BN"),col="black")
-legend(12, 85.5, legend=c("0,2", "0,5","1","1,5","5"),title = "Lernrate",
+legend(12, 85.5, legend=c("0,2", "0,5","1","1,5","5"),title = "leaning rate",
        col=c("orange", "red","blue","black","chartreuse4"), lty=1)

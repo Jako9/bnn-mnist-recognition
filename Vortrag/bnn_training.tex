@@ -58,7 +58,7 @@
 \definecolor{mm3}{RGB}{15, 112, 57}
 
 
-\title{TODO Titel}
+\title{MNIST Training for BNN}
 \author[Diep, Köhler, Naumann]{Jack Diep, Florian Köhler, Yannick Naumann}
 \institute[BNN-Training]{Design Your Own CPU - Design of Embedded Systems}
 \titlegraphic{\includegraphics[width=0.675\textwidth]{images/tudo-title-2.jpg}}
@@ -159,13 +159,15 @@ Inhalt...
 	\centering
 		\begin{tabular}{|c|c|c|}\hline
 		Run&binary&normal\\\hline
-		1&88.29\%&97.43\%\\\hline
+		1&\textbf{88.29}\%&\textbf{97.43}\%\\\hline
 		2&87.32\%&96.98\%\\\hline
 		3&87.19\%&97.2\%\\\hline
 	\end{tabular}	
 	\column{0.49\textwidth}
 	\begin{itemize}
-		\item TODO
+		\item training for 50 epochs
+		\item mean loss of 9,6\%
+		\item loss in granularity
 	\end{itemize}
 	
 \end{columns}
@@ -175,7 +177,22 @@ Inhalt...
 
 \subsection{Parameter Analysis}
 \begin{frame}{learning rate}
-Inhalt...
+\begin{columns}
+	\column{0.49\textwidth}
+	\begin{itemize}
+		\item higher value $\rightarrow$ more weights are updated
+		\item balance between over- and underfitting
+	\end{itemize}	
+	\column{0.49\textwidth}
+	%TODO Graph over- and underfitting
+	
+	
+	
+\end{columns}
+\end{frame}
+\begin{frame}{evaluation learning rate}
+\centering
+\vspace*{-1cm}\includegraphics[scale=0.6]{images/learningrate_measurement.pdf}
 \end{frame}
 
 
