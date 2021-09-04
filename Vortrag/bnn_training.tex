@@ -88,15 +88,52 @@
 
 \section{BNN Design}
 \begin{frame}{Binarisation of Linear Layer}
-\begin{itemize}
-	\item binarisation of weights
-	\item binarisation of input data
-	\item calculation through \textit{nn.linear}
-\end{itemize}
+\begin{columns}
+	\column{0.49\textwidth}
+	\begin{itemize}
+		\item binarisation of weights
+		\item binarisation of input data for hidden layers
+		\item calculation through \textit{nn.linear}
+	\end{itemize}
+	\column{0.49\textwidth}
+	\centering
+	\begin{tikzpicture}[minimum height=0.75cm,minimum width=2cm,line width = 0.25mm]
+	\node[rectangle,draw=black] (input) {Input};
+	\node[rectangle,draw=black] (weights) at(3,0) {Weights};
+	\node[rectangle,draw=black] (sign1) at(0,-1.5)  {sign(x)};
+	\node[rectangle,draw=black] (sign2) at(3,-1.5)  {sign(x)};
+	\node[rectangle,draw=black] (nnlinear) at(1.5,-3)  {nn.linear};
+	
+	\node[scale=0.01] (weightsin) at(4.5,0) {};
+	\node[scale=0.01] (inputin) at(0,1.5) {};
+	
+	
+	\node[rectangle,draw=preload, fit= (input) (weights) (sign1) (sign2),inner sep=0.4cm] (bnn)   {};
+	\node [text=preload,yshift=0.4cm,xshift=-1.5cm] (bnnlabel) at (bnn.north east) {BinarizedLinear};
+	
+	
+	
+	\draw [->,dotted,line width = 0.4mm] (weightsin) -- (weights) node[] at(1,-0.75) {activation};
+	\draw [->,line width = 0.4mm] (inputin) -- (input);	
+	
+	\draw [->,line width = 0.4mm] (input) -- (sign1) ;
+	\draw [->,line width = 0.4mm] (weights) -- (sign2);
+	
+	\draw [->,line width = 0.4mm] (sign1) -- (nnlinear) ;
+	\draw [->,line width = 0.4mm] (sign2) -- (nnlinear);
+	
+	
+	\end{tikzpicture}
+
+\end{columns}
 \end{frame}
+
+
 \begin{frame}{Activation}
 Inhalt...
 \end{frame}
+
+
 \begin{frame}{Batch Norm (BN)}
 \begin{itemize}
 	\item In NN
@@ -111,6 +148,8 @@ Inhalt...
 	\end{itemize}
 \end{itemize}
 \end{frame}
+
+
 \begin{frame}{Evaluation of last layer}
 \begin{columns}
 	\column{0.49\textwidth}
@@ -137,27 +176,13 @@ Inhalt...
 \tableofcontents[currentsection]
 \end{frame}
 \subsection{Layer Analysis}
-\begin{frame}{Effect of Batch Norm}
- 	\begin{columns}
- 		\column{0.49\textwidth}
- 		\begin{itemize}
- 			\item 7.4\% improved peak performance
- 			\item Less jitter with BN
- 			\item Reduced expolding gradient
- 		\end{itemize}
- 		
- 		\column{0.49\textwidth}
- 		\centering
- 		\includegraphics[scale=0.45]{images/batchnorm_measurement.pdf}
- 	\end{columns}
-\end{frame}
 \begin{frame}{Consequences of linear layer binarisation}
 
 
 \begin{columns}
 	\column{0.49\textwidth}
 	\centering
-		\begin{tabular}{|c|c|c|}\hline
+	\begin{tabular}{|c|c|c|}\hline
 		Run&binary&normal\\\hline
 		1&\textbf{88.29}\%&\textbf{97.43}\%\\\hline
 		2&87.32\%&96.98\%\\\hline
@@ -174,6 +199,22 @@ Inhalt...
 
 
 \end{frame}
+
+\begin{frame}{Effect of Batch Norm}
+ 	\begin{columns}
+ 		\column{0.49\textwidth}
+ 		\begin{itemize}
+ 			\item 7.4\% improved peak performance
+ 			\item Less jitter with BN
+ 			\item Reduced expolding gradient
+ 		\end{itemize}
+ 		
+ 		\column{0.49\textwidth}
+ 		\centering
+ 		\includegraphics[scale=0.45]{images/batchnorm_measurement.pdf}
+ 	\end{columns}
+\end{frame}
+
 
 \subsection{Parameter Analysis}
 \begin{frame}{learning rate}
