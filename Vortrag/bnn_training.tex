@@ -362,8 +362,17 @@
 	\end{minipage}
 \end{frame}
 
+\subsection{Training}
+
 \begin{frame}
-	\frametitle{Training}
+	\centering
+	\vfill
+	\textbf{\Large Training}
+	\vfill
+\end{frame}
+
+\begin{frame}
+	\frametitle{Training (Single step)}
 	\begin{enumerate}
 		\item<+-> Input data \only<5->{\checkmark}
 		\item<+-> \only<6>{\color{red}}Run the network \only<6>{?}
@@ -398,15 +407,49 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Training}
+	\frametitle{Training (Single step)}
 	\begin{enumerate}
 		\item Input data \checkmark
 		\item Run the network \checkmark
 		\item Compare output with expected values
 
 		      $\rightarrow$ Calculate error ($\lvert v-\text{expected}\rvert$) \only<2->{\checkmark}
-		\item Run error back through network, adjust weights \only<3->{\dots}
+		\item Run error back through network, adjust weights
 	\end{enumerate}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Adjusting weights}
+
+	\begin{block}{Backpropagation}
+		Calculate change of error when adjusting some weight
+
+		$\rightarrow$ \emph{Slope}
+	\end{block}\bigskip
+
+	\begin{center}
+		\begin{tikzpicture}[x=1.5cm]
+			\tikzset{
+				netnode/.style={draw=blue!50,line width=1mm,circle,minimum size=1cm},
+			}
+			\node[netnode] (s) at (-1,0) {};
+			\node[netnode] (a) at (1,0) {a};
+			\node[netnode] (b) at (2,0) {b};
+			\node[netnode] (c) at (3,0) {c};
+			\node (d) at (4,0) {\dots};
+			\node[netnode] (z) at (5,0) {z};
+			\node[netnode] (error) at (6,0) {error};
+
+			\draw[-stealth,blue!50,dashed,thick]
+			(s) -- node[below] {weight} (a) -- (b) -- (c) -- (d) -- (z) -- (error);
+		\end{tikzpicture}
+	\end{center}
+
+	\uncover<2->{
+		\begin{equation*}
+			\frac{\delta\text{error}}{\delta\text{weight}} = \frac{\delta a}{\delta\text{weight}} \cdot \frac{\delta b}{\delta a} \cdot \frac{\delta c}{\delta b} \cdot \dots \cdot \frac{\delta z}{\delta y} \cdot \frac{\delta\text{error}}{\delta z}
+		\end{equation*}
+	}
 \end{frame}
 
 \section{BNN Design}
