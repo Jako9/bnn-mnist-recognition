@@ -375,7 +375,7 @@
 	\frametitle{Training (Cycle)}
 	\begin{enumerate}
 		\item<+-> Input data \only<5->{\checkmark}
-		\item<+-> \only<6>{\color{red}}Run the network \only<6>{?}
+		\item<+-> \only<6>{\color{red}}Run the network\only<6>{?}
 		\item<+-> Compare output with expected values
 
 		$\rightarrow$ Calculate error ($\lvert v-\text{expected}\rvert$)
@@ -414,7 +414,7 @@
 		\item Compare output with expected values
 
 		      $\rightarrow$ Calculate error ($\lvert v-\text{expected}\rvert$) \only<2->{\checkmark}
-		\item Run error back through network, adjust weights
+		\item \only<3>{\color{red}}Run error back through network, adjust weights\only<3>{?}
 	\end{enumerate}
 \end{frame}
 
@@ -437,25 +437,28 @@
 			\node[netnode] (b) at (2,0) {b};
 			\node[netnode] (c) at (3,0) {c};
 			\node (d) at (4,0) {\dots};
-			\node[netnode] (z) at (5,0) {z};
-			\node[netnode] (error) at (6,0) {error};
+			\node[netnode] (y) at (5,0) {y};
+			\node[netnode] (z) at (6,0) {z};
+			\node[netnode] (error) at (7,0) {error};
 
 			\draw[-stealth,blue!50,dashed,thick]
-			(s) -- node[below] {weight} (a) -- (b) -- (c) -- (d) -- (z) -- (error);
+			(s) -- node[below] {$w$} (a) -- (b) -- (c) -- (d) -- (y) -- (z) -- (error);
 		\end{tikzpicture}
 	\end{center}
 
 	\uncover<2->{
-		\begin{equation*}
-			\frac{\delta\text{error}}{\delta\text{weight}} = \frac{\delta a}{\delta\text{weight}} \cdot \frac{\delta b}{\delta a} \cdot \frac{\delta c}{\delta b} \cdot \dots \cdot \frac{\delta z}{\delta y} \cdot \frac{\delta\text{error}}{\delta z}
-		\end{equation*}
+		\begin{block}{Chain rule}
+			\begin{equation*}
+				\frac{\delta\text{error}}{\delta w} = \frac{\delta a}{\delta w} \cdot \frac{\delta b}{\delta a} \cdot \frac{\delta c}{\delta b} \cdot \dots \cdot \frac{\delta z}{\delta y} \cdot \frac{\delta\text{error}}{\delta z}
+			\end{equation*}
+		\end{block}
 	}
 \end{frame}
 
 \begin{frame}
 	\centering
 	\vfill
-	\textbf{\Large BNN}
+	\textbf{\Large Binarized Neural Network}
 	\vfill
 \end{frame}
 
