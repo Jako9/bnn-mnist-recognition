@@ -455,6 +455,26 @@
 	}
 \end{frame}
 
+\subsection{Pytorch}
+
+\begin{frame}
+	\centering
+	\vfill
+	\textbf{\Large Pytorch}
+	\vfill
+\end{frame}
+
+\begin{frame}
+	\frametitle{Pytorch}
+
+	\begin{itemize}
+		\item Framework for NNs in Python
+		\item Easy to use $\rightarrow$ good for testing
+		\item works cuda-accelerated
+	\end{itemize}
+
+\end{frame}
+
 \begin{frame}
 	\centering
 	\vfill
@@ -547,6 +567,107 @@
 
 	\end{columns}
 \end{frame}
+
+\subsection{Binarization of Input data}
+
+\begin{frame}
+	\centering
+	\vfill
+	\textbf{\Large Binarization of Input data}
+	\vfill
+\end{frame}
+
+\begin{frame}{Binarization of Input data}
+	\begin{itemize}
+		\item Mapping 255 values to 0,1
+		\item minimize accuracy losses
+		\item 2 approaches
+		\begin{itemize}
+			 \item Threshold
+			 \item Probability
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Threshold-Binarization}
+	\begin{columns}
+		\column{0.49\textwidth}
+		\begin{itemize}
+			\item define static threshold
+			\item filter pixel-array via: \\pixel $>$ threshold
+		\end{itemize}
+		\column{0.49\textwidth}
+		\centering
+  		\includegraphics[width=.6\linewidth]{./images/comparison/default}
+  		\includegraphics[width=.6\linewidth]{./images/comparison/threshold/200}
+
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Probability-Binarization}
+	\begin{columns}
+		\column{0.49\textwidth}
+		\begin{itemize}
+			\item each pixelvalue dictates its prob for being 1
+			\item binarize same trainingset multiple times
+			\begin{itemize}
+				\item Run each epoche with all trainingsets
+			\end{itemize}
+		\end{itemize}
+		\column{0.49\textwidth}
+		\centering
+  		\includegraphics[width=.6\linewidth]{./images/comparison/default}
+  		\includegraphics[width=.6\linewidth]{./images/comparison/overlapped}
+
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Comparison Threshold, Prob}
+	\begin{columns}
+		\column{0.49\textwidth}
+		\begin{itemize}
+			\item Threshold
+			\begin{itemize}
+				\item Using integrated tensor-functions
+				\item 150ms per iteration
+				\item Convergence after approx. 100 epochs
+			\end{itemize}
+		\end{itemize}
+		\column{0.49\textwidth}
+		\begin{itemize}
+			\item Probability
+			\begin{itemize}
+				\item Iterate through tensor manually
+				\item 250ms per iteration
+				\item Convergence after approx. 20*30 iterations
+			\end{itemize}
+		\end{itemize}
+		
+
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Evaluating Accuracy-Loss}
+	\begin{columns}
+		\column{0.49\textwidth}
+		\centering
+		\begin{tabular}{|c|c|c|c|}\hline
+			Run & Non-Binarized    & threshold        & prob              \\\hline
+			1   	& 91.99\%          & 89.24\%          & 92.52\%           \\\hline
+			2   & 91.99\%          & 89.24\%          & 91.82\%           \\\hline
+			3   & 91.99\%          & 89.24\%          & 92.56\%           \\\hline
+			4   & 91.99\%          & 89.24\%          & 91.02\%           \\\hline
+			avg & \textbf{91.99\%} & \textbf{89.24\%} & \textbf{91.98\%}  \\\hline
+		\end{tabular}
+		\column{0.49\textwidth}
+		\centering
+		\begin{itemize}
+			\item 600 epochs for threshold, default
+			\item 20 epochs, 30 trainingsets for prob
+		\end{itemize}
+	\end{columns}
+\end{frame}
+
 
 \section{BNN Training Analysis}
 \begin{frame}
