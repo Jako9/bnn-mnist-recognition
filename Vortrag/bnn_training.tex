@@ -550,6 +550,9 @@
 \end{frame}
 
 \begin{frame}{Batch Norm (BN)}
+\begin{columns}
+	\column{0.49\textwidth}	
+
 \begin{itemize}
 	\item In NN
 	\begin{itemize}
@@ -562,6 +565,10 @@
 		\item prevent \textit{expolding gradient}
 	\end{itemize}
 \end{itemize}
+\column{0.49\textwidth}	
+\centering
+\vspace*{-1cm}\includegraphics[scale=0.5]{images/gradient_graph.pdf}
+\end{columns}
 \end{frame}
 
 
@@ -814,6 +821,7 @@
 	\column{0.49\textwidth}
 	\begin{itemize}
 		\item frequency of error calculation
+		\item normalisation though Batch Norm 
 		\item rate of parallelization
 	\end{itemize}
 	\column{0.49\textwidth}	
@@ -855,7 +863,7 @@
 	\end{columns}
 
 \end{frame}
-\begin{frame}{evaluation learning rate}
+\begin{frame}{Evaluation learning rate}
 	\centering
 	\vspace*{-1cm}\includegraphics[scale=0.6]{images/learningrate_measurement.pdf}
 \end{frame}
