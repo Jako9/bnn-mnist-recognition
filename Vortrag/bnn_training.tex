@@ -483,30 +483,32 @@
 \tableofcontents[currentsection]
 \end{frame}
 
+\subsection{The Network}
 \begin{frame}{The Network}
 \centering
-\begin{tikzpicture}[minimum height=0.8cm,minimum width=5cm,line width = 0.25mm]
-\node[rectangle,draw=black,rotate=90,color=preload] (bl1) {Binarized Linear (500)};
-\node[rectangle,draw=black,rotate=90, below of=bl1] (bn1) {Batch Norm};
-\node[rectangle,draw=black,rotate=90, below of=bn1] (a1) {Activation};
+\begin{tikzpicture}[minimum height=0.8cm,minimum width=3cm,line width = 0.25mm]
+\node[rectangle,draw=black,color=preload] at(0,2)(bl1) {Binarized Linear (500)};
+\node[rectangle,draw=black, below of=bl1] (bn1) {Batch Norm};
+\node[rectangle,draw=black, below of=bn1] (a1) {Activation};
 
-\node[rectangle,draw=black,rotate=90,color=preload] at (4,0)(bl2) {Binarized Linear (1024)};
-\node[rectangle,draw=black,rotate=90, below of=bl2] (bn2) {Batch Norm};
-\node[rectangle,draw=black,rotate=90, below of=bn2] (a2) {Activation};
+\node[rectangle,draw=black,color=preload] at (4,0)(bl2) {Binarized Linear (1024)};
+\node[rectangle,draw=black, below of=bl2] (bn2) {Batch Norm};
+\node[rectangle,draw=black, below of=bn2] (a2) {Activation};
 
-\node[rectangle,draw=black,rotate=90,color=preload] at (8,0)(bl3) {Binarized Linear (1024)};
-\node[rectangle,draw=black,rotate=90, below of=bl3] (bn3) {Batch Norm};
-\node[rectangle,draw=black,rotate=90, below of=bn3] (a3) {Activation};
+\node[rectangle,draw=black,color=preload] at (8,-2)(bl3) {Binarized Linear (1024)};
+\node[rectangle,draw=black, below of=bl3] (bn3) {Batch Norm};
+\node[rectangle,draw=black, below of=bn3] (a3) {Activation};
 
-\node[rectangle,draw=black,rotate=90] at (12,0)(l) {Linear (1024)};
-\node[rectangle,draw=black,rotate=90, below of=l] (sm) {softmax};
+\node[rectangle,draw=black] at (11,0)(l) {Linear (1024)};
+\node[rectangle,draw=black, below of=l] (sm) {softmax};
 
 \draw [->,line width = 0.4mm] (a1) -- (bl2) ;
 \draw [->,line width = 0.4mm] (a2) -- (bl3) ;
-\draw [->,line width = 0.4mm] (a3) -- (l) ;
+\draw [->,line width = 0.4mm] (a3.east) -- (13,-4) -- (13,0) -- (l) ;
 \end{tikzpicture}
 \end{frame}
 
+\subsection{Layers}
 \begin{frame}{Binarisation of Linear Layer}
 	\begin{columns}
 		\column{0.49\textwidth}
@@ -558,7 +560,7 @@
 	\end{itemize}
 	\item In BNN
 	\begin{itemize}
-		\item prevent \textit{expolding gradient} %TODO graphic
+		\item prevent \textit{expolding gradient}
 	\end{itemize}
 \end{itemize}
 \end{frame}
@@ -802,7 +804,12 @@
 
 
 \subsection{Parameter Analysis}
-
+\begin{frame}
+\centering
+\vfill
+\textbf{\Large Parameter Analysis}
+\vfill
+\end{frame}
 \begin{frame}{Batch size}
 \begin{columns}
 	\column{0.49\textwidth}
@@ -813,7 +820,7 @@
 	\column{0.49\textwidth}	
 	\centering
 	\begin{tabular}{|c|c|}\hline
-		Batchgröße&Zeit (s)\\\hline
+		Batchsize&Time (s)\\\hline
 		10&30,68\\\hline
 		50&11,33\\\hline
 		100&8,76\\\hline
@@ -826,6 +833,8 @@
 \end{columns}
 \end{frame}
 
+
+
 \begin{frame}{Evaluation of Batch size}
 \centering
 \vspace*{-1cm}\includegraphics[scale=0.62]{images/batchsize_measurement.pdf}
@@ -836,11 +845,11 @@
 		\column{0.49\textwidth}
 		\begin{itemize}
 			\item higher value $\rightarrow$ more weights are updated
-			\item balance between over- and underfitting
+			\item balance between vanishing- and exploding gradient
 		\end{itemize}
 		\column{0.49\textwidth}
-		%TODO Graph over- and underfitting
-		
+		\centering
+		\vspace*{-1cm}\includegraphics[scale=0.5]{images/gradient_graph.pdf}
 
 
 

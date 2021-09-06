@@ -8,7 +8,7 @@ bs_1000 = read.csv("batchsize_1000.csv", header = FALSE,check.names=FALSE)
 xs <- seq(1,21)
 print(data_bn)
 
-plot(x = xs,y = bs_100,type="l",col="orange",ylim=c(83,88.2),xlab = "Epoche",ylab = "Genauigkeit(%)")
+plot(x = xs,y = bs_100,type="l",col="orange",ylim=c(83,88.2),xlab = "epoch",ylab = "accuracy (%)")
 lines(x = xs,y = bs_10,col="grey")
 lines(x = xs,y = bs_50,col="darkviolet")
 lines(x = xs,y = bs_150,col="red")
