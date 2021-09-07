@@ -465,8 +465,9 @@
 	\column{0.49\textwidth}
 	\begin{itemize}
 		\item Create a BNN in PyTorch
-		\item Image recognition on MNIST-Dataset
 		\item[$\rightarrow$] Keep an accuracy of at least 90\%
+		\item Image recognition on MNIST-Dataset
+		
 		\item Export trained BNN
 	\end{itemize}
 	\column{0.49\textwidth}
@@ -818,36 +819,36 @@
 \textbf{\Large Parameter Analysis}
 \vfill
 \end{frame}
-%\begin{frame}{Batch size}
-%\begin{columns}
-%	\column{0.49\textwidth}
-%	\begin{itemize}
-%		\item frequency of error calculation
-%		\item normalisation though Batch Norm 
-%		\item rate of parallelization
-%	\end{itemize}
-%	\column{0.49\textwidth}	
-%	\centering
-%	\begin{tabular}{|c|c|}\hline
-%		Batchsize&Time (s)\\\hline
-%		10&30,68\\\hline
-%		50&11,33\\\hline
-%		100&8,76\\\hline
-%		150&7,95\\\hline
-%		200&7,63\\\hline
-%		500&6,66\\\hline
-%		1000&6,39\\\hline
-%		
-%	\end{tabular}
-%\end{columns}
-%\end{frame}
-%
-%
-%
-%\begin{frame}{Evaluation of Batch size}
-%\centering
-%\vspace*{-1cm}\includegraphics[scale=0.62]{images/batchsize_measurement.pdf}
-%\end{frame}
+\begin{frame}{Batch size}
+\begin{columns}
+	\column{0.49\textwidth}
+	\begin{itemize}
+		\item frequency of error calculation
+		\item normalisation though Batch Norm 
+		\item rate of parallelization
+	\end{itemize}
+	\column{0.49\textwidth}	
+	\centering
+	\begin{tabular}{|c|c|}\hline
+		Batchsize&Time (s)\\\hline
+		10&30,68\\\hline
+		50&11,33\\\hline
+		100&8,76\\\hline
+		150&7,95\\\hline
+		200&7,63\\\hline
+		500&6,66\\\hline
+		1000&6,39\\\hline
+		
+	\end{tabular}
+\end{columns}
+\end{frame}
+
+
+
+\begin{frame}{Evaluation of Batch size}
+\centering
+\vspace*{-1cm}\includegraphics[scale=0.62]{images/batchsize_measurement.pdf}
+\end{frame}
 
 \begin{frame}{Learning rate}
 	\begin{columns}
