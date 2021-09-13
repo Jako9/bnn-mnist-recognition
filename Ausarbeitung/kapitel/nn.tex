@@ -5,8 +5,7 @@ aus Neuronen. Diese sind schichtweise organisiert wobei
 jedes Neuron einer Schicht jeweils zu allen Neuronen der
 direkt anliegenden Schichten verbunden ist.
 Abbildung \ref{fig:Neuronales Netzwerk} zeigt beispielhaft ein
-neuronales Netzwerk aus 19 Neuronen mit insgesamt 5 Schichten.
-\bigskip
+neuronales Netzwerk aus 19 Neuronen mit insgesamt 5 Schichten.\bigskip
 
 \begin{figure}[h]
     \begin{center}
@@ -112,7 +111,7 @@ Die beiden erläuterten Berechnungsschritte werden schichtweise in Richtung des
 Datenflusses des Netzwerks für alle Neuronen durchgeführt. Im folgenden
 Beispiel wird bildhaft dargestellt, wie solch eine Neuronenwertberechnung für
 ein Netzwerk aussieht, welche in der betrachteten Schicht die
-$tanH$-Aktivierungsfunktion verwendet.
+$tanH$-Aktivierungsfunktion verwendet.\bigskip
 
 \begin{figure}
     \centering
@@ -154,7 +153,7 @@ vorherigen Beispiel verwendetete Funktion $tanH$, bei der alle Eingaben auf den
 Zielbereich [-1,1] abgebildet werden.
 
 Im Folgenden sind sind einige, für neuronale Netzwerke übliche
-Aktivierungsfunktionen abgebildet.
+Aktivierungsfunktionen abgebildet.\bigskip
 
 \begin{figure}[H]
     \begin{minipage}{0.45\textwidth}
@@ -220,12 +219,13 @@ Beim Training werden wiederholt verschiedene Eingaben in das Netzwerk getätigt,
 zu denen das korrekte Ergebnis bekannt ist. In der letzten Schicht des Netzwerks,
 der Ausgabeschicht, werden die vom Netzwerk bestimmten Werte der jeweiligen
 Neuronen mit den erwarteten Werten verglichen.
-Die Differenz dieser wird als Fehler bezeichnet.
+Die absolute Differenz dieser wird als Fehler bezeichnet.
 Das Ziel des Trainings ist es, den Fehler durch Anpassung der Kantengewichte zu
 verringern oder im Optimalfall ganz zu eliminieren (Fehler = 0).
-In folgender Abbildung ist ein Fehlerbeispiel dargestellt.
+In folgender Abbildung ist ein Fehlerbeispiel dargestellt.\bigskip
 
 \begin{figure}[H]
+    \centering
     \begin{tikzpicture}[x=3cm,y=-1.5cm]
         \tikzset{
             netnode/.style={circle,draw=black,minimum size=1cm},
@@ -273,11 +273,32 @@ notwendigen Gewichtsanpassung, um die aktuelle Ausgabe in die gewünschte
 Richtung zu verändern.
 
 Um eine Anpassung an einem Kantengewicht vorzunehmen, muss demnach zuerst
-festgestellt werden, wie der Ausgabewert sich bei einer Änderung des Gewichts
-verhält.
+festgestellt werden, wie die errechneten Fehler sich bei Änderungen am Gewicht
+verhalten. Dazu wird die sogenannte \emph{Slope} ermittelt, also die Kurve
+auf der das Kantengewicht im Verhältnis zum Fehler steht. Anschließend
+wird die Steigung dieser Kurve an der aktuellen Stelle (Kantengewicht) errechnet.
+Aus dem Ergebnis lässt sich ableiten, in welche Richtung das Kantengewicht
+justiert werden muss, um den Fehler zu verringern.
+Ein Beispiel dazu befindet sich in der folgenden Abbildung, dort ist die Tangente
+der Fehlerkurve an der Stelle -0.5 in rot dargestellt. Daraus folgt,
+dass eine Erhöhung des zugehörigen Kantengewichts den Fehler weiter verringert.\bigskip
 
-Abbildung zeigt einen Ausschnitt aus einem einfachen neuronalen Netzwerk
-mit drei Schichten.
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[xlabel=Gewicht,ylabel=Fehler,width=7cm,xmin=-1,xmax=1,ymin=0,ymax=2,thick,grid=both]
+            \addplot[dashed,smooth] {(x-0.25)^2+0.15};
+            \addplot[draw=purple] {-1.5*x-0.03};
+        \end{axis}
+    \end{tikzpicture}
+\end{figure}
+
+Diese Anpassungen werden in jedem Trainingsdurchlauf für alle Kantengewichte
+durchgeführt, wobei die Stärke der Anpassung häufig konfigurierbar ist.
+Die Ermittlung der Fehlerkurve kann mathematisch durch das Verwenden der
+sogenannten \emph{Chainingrule} \cite{Rumelhart} erleichtert werden.
+Zur Verbildlichung dieser Regel zeigt die folgende Abbildung
+einen Ausschnitt aus einem einfachen neuronalen Netzwerk mit drei Schichten.\bigskip
 
 \begin{figure}[H]
     \centering
@@ -291,20 +312,68 @@ mit drei Schichten.
         \node[netnode] (c) at(3,0) {$c$};
 
         \draw[->] (a) -- node[above] {$w_a$} (b1);
-        \draw[->,dotted,thick] (b1) -- node[above] {$f(x)$} (b2);
+        \draw[->,dotted,thick] (b1) -- node[above] {$f$} (b2);
         \draw[->] (b2) -- node[above] {$w_b$} (c);
+        \draw[->,very thick,draw=blue] (c) to[bend left] (b2);
+        \draw[->,very thick,draw=purple] (b2) to[bend left] (b1);
+        \draw[->,very thick,draw=red] (b1) to[bend left] (a);
     \end{tikzpicture}
-    \caption{Neuronenkette}
+    \caption{Neuronenkette: Backpropagation}
 \end{figure}
 
-Um herauszufinden, wie eine Änderung von $w_a$ sich auf den Wert des Neurons $c$
-auswirkt, kann die \emph{Chainingregel} genutzt werden (TODO: cite).
-Diese kann leicht gezeigt werden, denn es gilt:
+Die notwendige Anpassung des Kantengewichts $w_a$ zur Verringerung des Fehlers
+in $c$ kann wie folgt ermittelt werden:
+
+\[
+    \frac{\delta c}{\delta w_a}=\color{red}\frac{\delta b_{(1/2)}}{\delta w_a}\color{purple}\cdot\frac{\delta b_{(2/2)}}{\delta b_{(1/2)}}\color{blue}\cdot\frac{\delta c}{\delta b_{(2/2)}}
+\]
+
+Diese Kette lässt sich weiter vereinfachen:
 
 \begin{align*}
-    c         & = b_{(2/2)}\cdot w_b \\
-    b_{(2/2)} & = f(b_{(1/2)})       \\
-    b_{(1/2)} & = a\cdot w_a
+    \frac{\delta c}{\delta w_a} & = a\cdot\frac{\delta b_{(2/2)}}{\delta b_{(1/2)}}\cdot\frac{\delta c}{\delta b_{(2/2)}} & \left(\frac{\delta b_{(1/2)}}{\delta w_a} =a\right)                   \\
+                                & = a\cdot f'(b_{(1/2)})\cdot\frac{\delta c}{\delta b_{(2/2)}}                            & \left(\frac{\delta b_{(2/2)}}{\delta b_{(1/2)}} =f'(b_{(1/2)})\right) \\
+                                & = a\cdot f'(a\cdot w_a)\cdot\frac{\delta c}{\delta b_{(2/2)}}                           & \left(b_{(1/2)} =a\cdot w_a\right)                                    \\
+                                & = a\cdot f'(b_{(1/2)})\cdot w_b                                                         & \left(\frac{\delta c}{\delta b_{(2/2)}} =w_b\right)                   \\
 \end{align*}
 
-(TODO: berechnung)
+Offensichtlich lässt sich dieses Vorgehen auf jede beliebig lange Neuronenkette
+anwenden und erlaubt somit die Ermittlung der Richtungen aller notwendigen
+Gewichtsänderungen.
+Im zuvor erwähnten Optimalfall wird jedes Kantengewicht solange angepasst,
+bis ein Fixpunkt erreicht wurde und damit jedes Gewicht genau im Tal der
+jeweiligen Fehlerkurve liegt. Ein häufig auftretendes Problem ist
+das sowohl das zu starke als auch das zu schwache Anpassen der Gewichte.
+Ersteres führt zum hin- und herspringen des verwendeten Gewichts auf der
+Fehlerkurve sodass sich dem Tal nicht mehr angenähert wird.
+Letzteres hingegen führt dazu, dass die Korrektur außerhalb des Optimums
+zum Stillstand kommt. Siehe dazu auch Abbildungen 2.8 und 2.9.
+
+\begin{minipage}{0.5\textwidth}
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[xlabel=Gewicht,ylabel=Fehler,width=7cm,xmin=-1,xmax=1,ymin=0,ymax=2,thick,grid=both]
+                \addplot[dashed,smooth] {(x-0.25)^2+0.15};
+                \addplot[mark=*,draw=purple] coordinates {(-0.7,1.0525) (-0.5,0.7125) (-0.4,0.5725) (-0.35,0.51)};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Zu niedrige Lernrate}
+    \end{figure}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[xlabel=Gewicht,ylabel=Fehler,width=7cm,xmin=-1,xmax=1,ymin=0,ymax=2,thick,grid=both]
+                \addplot[dashed,smooth] {(x-0.25)^2+0.15};
+                \addplot[mark=*,draw=purple] coordinates {(-0.35,0.51) (1,0.7125) (-0.3,0.4525) (0.9,0.5725)};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Zu hohe Lernrate}
+    \end{figure}
+\end{minipage}
+
+Nachdem das Training eines neuronalen Netzwerks abgeschlossen ist,
+werden diese erlernten Kantengewichte gespeichert und häufig zur Verwendung
+exportiert.
