@@ -169,6 +169,40 @@
       \verb https://arxiv.org/abs/2012.00938
       \endverb
     \endentry
+    \entry{Rumelhart}{article}{}
+      \name{author}{3}{}{%
+        {{hash=980892af29a5c3eaadf9d6c1c9747255}{%
+           family={Rumelhart},
+           familyi={R\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+        {{hash=813bd95fe553e6079cd53a567b238287}{%
+           family={Hinton},
+           familyi={H\bibinitperiod},
+           given={Geoffrey\bibnamedelima E.},
+           giveni={G\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=6cbc29ad7fd57ffdb9ed4728418fd988}{%
+           family={Williams},
+           familyi={W\bibinitperiod},
+           given={Ronald\bibnamedelima J.},
+           giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{a4e59ba26b4bd3a9715679d15c730b07}
+      \strng{fullhash}{a4e59ba26b4bd3a9715679d15c730b07}
+      \strng{bibnamehash}{a4e59ba26b4bd3a9715679d15c730b07}
+      \strng{authorbibnamehash}{a4e59ba26b4bd3a9715679d15c730b07}
+      \strng{authornamehash}{a4e59ba26b4bd3a9715679d15c730b07}
+      \strng{authorfullhash}{a4e59ba26b4bd3a9715679d15c730b07}
+      \field{labelalpha}{RHW86}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Nature}
+      \field{title}{Learning representations by back-propagating errors}
+      \field{volume}{323}
+      \field{year}{1986}
+    \endentry
     \entry{DBLP:journals/corr/abs-1909-09139}{article}{}
       \name{author}{3}{}{%
         {{hash=0b9076029e47d507b18fc4311cd00bab}{%

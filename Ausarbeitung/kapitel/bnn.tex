@@ -41,8 +41,45 @@ Für BNNs ist hier die $sign(x)$ Funktion eine populäre Wahl.
 	\caption{Die Vorzeichenfunktion}
 	\label{fig:sign}
 \end{figure} 
-Diese überführt die Aktivierungen direkt in binäre Werte. Da für die \textit{backpropagation} allerdings die Ableitung der Aktivierungsfunktion benötigt wird und die Vorzeichenfunktion nicht stetig differenzierbar ist, wird diese oft approximiert. In unserem Netzwerk wird sie, wie häufig verwendet, durch die \textit{hard tanH} Funktion approximiert \cite{DBLP:journals/corr/abs-2012-00938}. Diese ist günstiger zu berechnen als die Funktion \textit{tanH} und ist bei Werten $x\leq-1 \vee x \geq 1$ gleich zur Vorzeichenfunktion.
+Diese überführt die Aktivierungen direkt in binäre Werte. Da für die \textit{backpropagation} allerdings die Ableitung der Aktivierungsfunktion benötigt wird und die Vorzeichenfunktion nicht stetig differenzierbar ist, wird diese oft approximiert. In unserem Netzwerk wird sie, wie häufig verwendet, durch die \textit{hard tanH} Funktion approximiert \cite{DBLP:journals/corr/abs-2012-00938}. Diese ist, in den Ableitungen, günstiger zu berechnen als die Funktion \textit{sign} und ist bei Werten $x\leq-1 \vee x \geq 1$ gleich zur Vorzeichenfunktion.
 \section{Binärer Linear-Layer}
+Für die Binarisierung der Linear-Layer wurde eine \textit{Wrapper-Klasse} für die Pytorch-Klasse \textit{nn.linear} erstellt.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[minimum height=0.75cm,minimum width=2cm,line width = 0.25mm]
+	\node[rectangle,draw=black] (input) {Eingabe};
+	\node[rectangle,draw=black] (weights) at(3,0) {Gewichte};
+	\node[rectangle,draw=black] (sign1) at(0,-1.5)  {sign(x)};
+	\node[rectangle,draw=black] (sign2) at(3,-1.5)  {sign(x)};
+	\node[rectangle,draw=black] (nnlinear) at(1.5,-3)  {nn.linear};
+	
+	\node[scale=0.01] (weightsin) at(4.5,0) {};
+	\node[scale=0.01] (inputin) at(0,1.5) {};
+	
+	
+	\node[draw=black,rectangle, fit= (input) (weights) (sign1) (sign2),inner sep=0.4cm] (bnn)   {};
+	\node [yshift=0.4cm,xshift=-1.5cm] (bnnlabel) at (bnn.north east) {BinarizedLinear};
+	
+	
+	
+	\draw [->,dotted,line width = 0.4mm] (weightsin) -- (weights);
+	\draw [->,line width = 0.4mm] (inputin) -- (input);
+	
+	\draw [->,line width = 0.4mm] (input) -- (sign1) ;
+	\draw [->,line width = 0.4mm] (weights) -- (sign2);
+	
+	\draw [->,line width = 0.4mm] (sign1) -- (nnlinear) ;
+	\draw [->,line width = 0.4mm] (sign2) -- (nnlinear);
+	
+	
+	\end{tikzpicture}
+	\caption{Aufbau des binären Linear-layer}
+	\label{fig:bln}
+\end{figure}
+Wie in Abbildung \ref{fig:bln} zu erkennen, erhält der binäre Linear-Layer, wie normaler Weise \textit{nn.linear}, die Ausgaben der vorherigen Schicht. Diese werden im Folgenden über die Vorzeichenfunktion binarisiert.\\
+Die Gewichte, welche über das Training aktualisiert werden, werden bei erster Verwendung ebenfalls binarisiert. Im folgenden übernimmt die Pytorch-Klasse \textit{nn.linear} die Berechnung der Aktivierung der Neuronen. Da die Berechnung der Aktivierungen also immer auf binären Gewichten und Eingaben geschieht, ist das Training binär.
+
 \section{BatchNorm}
 Die Rolle des \textit{BatchNorm-Layers} in nicht-binären Neuronalen-Netzwerken ist eine leicht andere als in unserem BNN. Durch \textit{BatchNorm} werden die Gewichte einer Schicht normalisiert. Hier wird dafür gesorgt, dass \textit{Batches} einen Mittelwert von Null und eine Standartabweichung von Eins haben\cite{batchnorm} .\\ 
 Durch diese reduzierte Streuung der Werte, können in Neuronalen Netzen höhere Lernraten verwendet werden.\\
