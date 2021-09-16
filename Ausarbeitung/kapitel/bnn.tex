@@ -77,13 +77,13 @@ Für die Binarisierung der Linear-Layer wurde eine \textit{Wrapper-Klasse} für 
 	\caption{Aufbau des binären Linear-layer}
 	\label{fig:bln}
 \end{figure}
-Wie in Abbildung \ref{fig:bln} zu erkennen, erhält der binäre Linear-Layer, wie normaler Weise \textit{nn.linear}, die Ausgaben der vorherigen Schicht. Diese werden im Folgenden über die Vorzeichenfunktion binarisiert.\\
+Wie in Abbildung \ref{fig:bln} zu erkennen, erhält die binäre Linear-Layer, wie normaler Weise \textit{nn.linear}, die Ausgaben der vorherigen Schicht. Diese werden im Folgenden über die Vorzeichenfunktion binarisiert.\\
 Die Gewichte, welche über das Training aktualisiert werden, werden bei erster Verwendung ebenfalls binarisiert. Im folgenden übernimmt die Pytorch-Klasse \textit{nn.linear} die Berechnung der Aktivierung der Neuronen. Da die Berechnung der Aktivierungen also immer auf binären Gewichten und Eingaben geschieht, ist das Training binär.
 
 \section{BatchNorm}
 Die Rolle des \textit{BatchNorm-Layers} in nicht-binären Neuronalen-Netzwerken ist eine leicht andere als in unserem BNN. Durch \textit{BatchNorm} werden die Eingaben einer Schicht, innerhalb eines \textit{Batches}, normalisiert. Hier wird dafür gesorgt, dass \textit{Batches} einen Mittelwert von Null und eine Standartabweichung von Eins haben\cite{batchnorm} .\\ 
 Durch diese reduzierte Streuung der Werte, können in Neuronalen Netzen höhere Lernraten verwendet werden, da stark ausschlagende Daten nicht zu einer starken Überanpassung führen.\\
-Bei binären Netzwerken hat dies, aufgrund der diskreten Kantengewichte,einen weniger großen Effekt.In BNNs erfüllt die \textit{BatchNorm} Schicht eine zentrale Rolle für das Lernen des Netzwerkes. Primär dient die Normalisierung der Schicht dazu, das \textit{expolding-gradient} Problem zu verhindern. Hier wird beim Training des Netzwerkes, welches die Error-Werte reduzieren soll, ein sehr hoher Error-Wert akkumuliert. Dies führt zu einer zu starken Anpassung der Gewichte, welche folgend zu einer niedrigeren Genauigkeit führt\cite{DBLP:journals/corr/abs-1909-09139}.\\
+Bei binären Netzwerken hat dies, aufgrund der diskreten Kantengewichte,einen weniger großen Effekt. In BNNs erfüllt die \textit{BatchNorm} Schicht eine zentrale Rolle für das Lernen des Netzwerkes. Primär dient die Normalisierung der Schicht dazu, das \textit{expolding-gradient} Problem zu verhindern. Hier wird beim Training des Netzwerkes, welches die Error-Werte reduzieren soll, ein sehr hoher Error-Wert akkumuliert. Dies führt zu einer zu starken Anpassung der Gewichte, welche folgend zu einer niedrigeren Genauigkeit führt\cite{DBLP:journals/corr/abs-1909-09139}.\\
  Da durch Auftreten des \textit{exploding gradients} die Genauigkeit stark abgesenkt wird, kann dieses Netzwerk sich, ab einer gewissen Schwelle, nicht mehr verbessern. Der stetige Lernerfolg wird hier durch regelmäßige Überkorrekturen nichtig gemacht.
 \begin{figure}[H]
 	\centering
@@ -98,7 +98,7 @@ Wie in Abbildung \ref{fig:bn} zu sehen ist, performt das Netzwerk mit \textit{Ba
 
 \section{Auswertung der letzten Schicht}
 Um am Ende das Ergebnis des Netzwerkes auszuwerten, müssen die Ergebnisse des letzten \textit{Linear-Layers} normalisiert werden. Diese Normalisierung entscheidet, ob ein Neuron feuert oder nicht. Für die Normalisierung der Daten wird hier die \textit{logsoftmax(x)} Funktion verwendet. Durch \textit{softmax(x)} werden die Aktivierungen der letzten Schicht so normalisiert, dass ihre Summe Eins ergibt. Dies ist mit Wahrscheinlichkeiten zu vergleichen, mit der das Bild die jeweilig zugeordnete Zahl widerspiegelt. Um bessere Ergebnisse in Kombination mit der Verlustfunktion, \textit{negative log likelihood loss}, zu erzielen, wird die \textit{logsoftmax}-Funktion verwendet.\\
-Da bei der Anwendung des MNIST-Datensatzes immer nur das Neuron ausgewählt werden sollte, da immer nur eine Zahl auf einem Bild abgebildet ist, wird bei der Auswertung über die \textit{argmax}-Funktion das aktivste Neuron ausgewählt. Dieses entspricht dann der Zahl, die am wahrscheinlichsten abgebildet ist.
+Da bei der Anwendung des MNIST-Datensatzes immer nur ein Neuron ausgewählt werden sollte, da immer nur eine Zahl auf einem Bild abgebildet ist, wird bei der Auswertung über die \textit{argmax}-Funktion das aktivste Neuron ausgewählt. Dieses entspricht dann der Zahl, die am wahrscheinlichsten abgebildet ist.
 
 
 \section{Verluste durch binäre Linear-Layer}
