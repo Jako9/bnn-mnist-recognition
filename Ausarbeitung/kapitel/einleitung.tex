@@ -3,44 +3,48 @@
 Neuronale Netzwerke bilden eine Unterkategorie des Machine-Learning und erlauben
 Auswertungen von Eingaben auf Basis von zuvor angelernten, empirischen
 Ergebnissen.
-Ein neuronales Netzwerk bildet ein System aus Neuronen ab, welche Schichtweise
+Ein neuronales Netzwerk bildet ein System aus Neuronen ab, welche schichtweise
 verbunden sind einen unidirektionalen Datenfluss erzeugen.
 Dieses System besteht üblicherweise aus einer Eingabeschicht, einer
-Ausgabeschicht und dazwischen beliebig viele \emph{versteckte} Schichten,
-welche die eigentliche Arbeit des Netzwerks verrichten.
-Die Anzahl der Neuronen in den Eingabe- und Ausgabeschichten ist intuitiv
-wählbar. Die Größe der Eingabeschicht wird häufig durch die Anzahl der
-möglichen Eingaben bestimmt, die Größe der Ausgabeschicht durch die Anzahl
-der möglichen Ergebnisse.
-Die Größe und Anzahl der dazwischen liegenden Schichten hingegen muss je
-nach Anforderung und Gegebenheiten individuell ermittelt werden.
+Ausgabeschicht und beliebig vielen \emph{versteckten} Schichten,
+welche die eigentliche Arbeit des Netzwerks verrichten und für die Erkennung
+von Merkmalen bei der Klassifizierung von Eingabedaten zuständig sind.
+Die Größe der Eingabeschicht wird durch die Anzahl der Faktoren bestimmt,
+welche bei der Klassifierung berücksichtigt werden sollen.
+Die Größe der Ausgabeschicht hingegen wird durch die Anzahl der erwarteten
+Klassen bestimmt, in welche klassifiziert werden soll.
+Die Größe und Anzahl der dazwischen liegenden Schichten wird je
+nach Anforderung und Gegebenheiten individuell ermittelt.
 Je größer das Netzwerk desto höher sind die Anforderungen an die benötigte
-Hardware um dieses zu betreiben. Bei schwächerer Hardware oder
-Einschränkungen bezüglich der Energieversorgung können kleinere Netzwerke
-eingesetzt werden, wenn auch häufig mit geringerer Genauigkeit verglichen
-mit einem größeren Netzwerk.
+Hardware um dieses zu betreiben. Schwächer Hardware oder
+Einschränkungen bezüglich der Energieversorgung führen demnach häufig
+zur Verwendung kleinerer Netzwerke, auch wenn diese typischerweise im Vergleich
+zu einem größeren Netzwerk eine geringere Genauigkeit bieten.
 
 
 \section{Motivation}
 
-Die Größe eines Netzwerks kann beim Entwurf dessen direkt beeinflusst werden.
-In Anwendungsgebieten, bei denen der Fokus auf geringen Hardwareanforderungen
-liegt, stoßen schnell das Problem der schwindenden Genauigkeit.
-Auf IoT-Geräten oder mobilen Platformen finden klassische neuronale Netzwerke
-daher nur eingeschränkt Nutzen.
-2016 veröffentlichten M. Courbariaux und Y. Bengio \cite{Courbariaux} eine 
-wissenschaftliche Arbeit und stellen dort das
-\emph{binarisierte neuronale Netzwerk} (kurz BNN) vor.
-Dieses könne im Vergleich zu einem klassischen neuronalen Netzwerk eine
-theoretische Geschwindigkeitssteigerung auf das 32-fache erreichen.
-Die Genauigkeit des BNN liege jedoch nur knapp unter derer klassischer Netzwerke.
+Die Größe eines Netzwerks kann beim Entwurf direkt beeinflusst werden.
+Beim Fokus auf den Einsatz von neuronalen Netzen auf klassisch langsamen
+Systemen liegt der Schwerpunkt auf der Balance zwischen Performanz und
+Genauigkeit.
+Auf IoT-Geräten oder mobilen Plattformen finden klassische neuronale Netzwerke
+aufgrund der Hardwareanforderungen daher nur eingeschränkt Nutzen.
+2016 veröffentlichten M. Courbariaux und Y. Bengio \cite{Courbariaux} eine
+wissenschaftliche Arbeit und stellen dort
+\emph{binarisierte neuronale Netzwerke} (kurz BNNs) vor.
+Diese erlauben im Vergleich zu klassischen neuronalen Netzwerken eine
+theoretische 32-fachen Performanzsteigerung. Dieses Versprechen folgt aus der
+Tatsache, dass klassische neuronale Netze mit 32-Bit Zahlen rechnen, während
+das vorgestellte BNN mit einem Bit auskommt. Somit können im Optimalfall 32
+1-Bit Rechenoperationen parallel und in nur einer Instruktion ausgeführt werden.
+Dennoch liege die Genauigkeit von BNNs nur knapp unter derer klassischer Netzwerke.
 Das BNN ermöglicht dank dieser Eigenschaften den Einsatz von neuronalen Netzen
-auf vergleichsweise schwacher Hardware und verspricht zugleich
-nur geringe Genauigkeitseinbüße.
+auf vergleichsweise schwacher Hardware mit nur geringen Genauigkeitseinbüßen.
 
-In dieser Ausarbeitung wird die allgemeine Funktionsweise von neuronalen
-Netzwerken erläutert und anschließend der Entwurf eines binarisiertes
-Netzwerk mit Fokus auf Handschriftenerkennung auf Basis des MNIST Datensatzes
-dokumentiert.
+In dieser Ausarbeitung wird eine Einführung in die Funktionsweise von neuronalen
+Netzwerken gegeben und anschließend der Entwurf eines binarisierten
+Netzwerks dokumentiert. Dieses wird für eine einfache Handschriftenerkennung der
+Zahlen null bis neun konzipiert und mit dem MNIST-Datensatz trainiert.
 Dabei werden grundlegende Überlegungen, das Vorgehen, Herausforderungen
 sowie dazu erarbeitete Lösungen vorgestellt.

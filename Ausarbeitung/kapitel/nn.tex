@@ -66,32 +66,35 @@ neuronales Netzwerk aus 19 Neuronen mit insgesamt 5 Schichten.\bigskip
 
 \section{Neuronen}\label{sec:neurons}
 
-Unter einem Neuron versteht sich bei neuronalen Netzen lediglich ein Knoten,
-in dem üblicherweise ein 32-bit großer Wert hinterlegt ist. Häufig kommen hier
-Gleitkommazahlen zwischen -1.0 und 1.0 zum Einsatz, da sich dieser Wertebereich
-besonders gut zum Rechnen eignet und Eigenschaften bezüglich der
-Multiplikation besitzt, die eine Wertexplosion verhindern.
-Die Werte aller Neuronen, mit Ausnahme derer in der Eingabeschicht, setzen sich
-jeweils aus den Werten aller Neuronen der direkt davor liegenden Schicht zusammen.
-Das genaue Vorgehen bei der Wertermittlung hängt jeweils vom Netzwerk
+Unter einem Neuron versteht sich in neuronalen Netzen lediglich ein Knoten,
+in dem üblicherweise eine 32-Bit Zahl hinterlegt ist. Die Semantik
+dieses Wertes hängt von dem jeweiligen Typ der Schicht ab, in dem sich das
+Neuron befindet.
+Die Werte aller Neuronen, mit Ausnahme jener aus der Eingabeschicht, setzen sich
+aus den Werten aller Neuronen der direkt davor liegenden Schicht zusammen.
+Das genaue Vorgehen bei der Wertermittlung hängt vom Entwurf des Netzwerks
 und den dort verwendeten Aktivierungsfunktionen ab.
 
 \section{Schichten und Kanten}\label{sec:layers}
 
 In einem neuronalen Netzwerk ist jedes Neuron einer Schicht mit allen Neuronen
-der jeweiligen davor liegenden und danach liegenden Schicht über Kanten verbunden.
+der jeweils davor liegenden und danach liegenden Schichten über Kanten verbunden.
 Neuronale Netzwerke sind unidirektionale Graphen, demnach fließen Informationen
 über Schichten (und folglich Kanten) nur in eine Richtung.
 
-Allen Kanten wird initial eine Gewichtung zugewiesen, welche erneut
-netzwerkabgängig generiert werden oder durch zuvor angelernte Daten bestimmt
-werden. Beim Trainieren des Netzwerks werden diese bei jeder Lerniteration
-(auch \emph{Epoch} genannt) justiert, während sie beim Betrieb für gewöhnlich
-keine Änderungen mehr erfahren.
-Die Genauigkeit eines Netzwerks wird überwiegend durch diese Gewichte bestimmt,
-daher ist das Ziel beim Trainieren eines Netzes die Optimierung jener.
+Die Kanten eines Netzwerks sind gewichtet, welche initial netzwerkabhängig
+generiert, manuell zugewiesen oder durch zuvor erlernte Daten bestimmt werden.
+Beim Trainieren eines Netzwerks werden diese in jeder Lerniteration
+(auch \emph{Epoch} genannt) justiert, während sie im Betrieb keine Änderungen
+mehr erfahren.
+Der Entwurf eines Netzwerks bestimmt die Performanz dessen und die damit
+verbundenen Hardwareanforderungen, nicht jedoch die Genauigkeit.
+Diese wird überwiegend von den Kantengewichten bestimmt, daher ist das Ziel
+des Trainings diese zu optimieren und damit die Genauigkeit des Netzwerks bei
+gleicher Performanz zu erhöhen. Der Unterschied zwischen einem genauen und
+einem ungenauen Netzwerk ist daher oft nur das investierte Training.
 
-Kantengewichte wirken sich maßgeblich auf die Wertberechnung von Neuronen aus.
+Kantengewichte wirken sich maßgeblich auf die Werteberechnung von Neuronen aus.
 Diese wird in zwei Schritten ausgeführt. Im ersten Schritt wird aus den
 Kantengewichten aller eingehenden Kanten und den Werten der darüber
 verbundenen Neuronen die Produktsumme gebildet.
@@ -100,14 +103,16 @@ im nachfolgenden Kapitel erläutert werden.
 
 \section{Aktivierungsfunktionen}\label{sec:activation}
 
-Im zweiten Schritt wird der zuvor errechnete Wert durch eine weitere Funktion
+Im zweiten Schritt wird die zuvor bestimmte Produktsumme durch eine Funktion
 modifiziert. Sogenannte \emph{Aktivierungsfunktionen} können beliebig gewählt
 werden, müssen jedoch offensichtlich alle möglichen Eingaben auf einen Wert
-abbilden können. Die verwendete Aktivierungsfunktion kann je nach
-Schicht variieren. Einmal gewählt, ist diese jedoch für die jeweilige Schicht
-im Netzwerk für die Laufzeit fest.
+abbilden können. Aktivierungsfunktionen erwarten genau einen Eingabewert
+und bilden diesen auf genau einen Wert ab. Ein einfaches Beispiel ist die
+Identitätsfunktion $\text{id}(x) = x$. Die eingesetzten Aktivierungsfunktionen
+können schichtweise variieren. Einmal gewählt sind diese jedoch für das
+entworfene Netzwerk fest.
 
-Die beiden erläuterten Berechnungsschritte werden schichtweise in Richtung des
+Diese beiden Berechnungsschritte werden schichtweise in Richtung des
 Datenflusses des Netzwerks für alle Neuronen durchgeführt. Im folgenden
 Beispiel wird bildhaft dargestellt, wie solch eine Neuronenwertberechnung für
 ein Netzwerk aussieht, welche in der betrachteten Schicht die
@@ -143,17 +148,17 @@ $tanH$-Aktivierungsfunktion verwendet.\bigskip
 \end{figure}
 
 Die Wahl der Aktivierungsfunktion beeinflusst die möglichen
-Werte, die Neuronen innerhalb einer Schicht annehmen können. Um eine
+Werte, die Neuronen im Netzwerk annehmen können. Um eine
 Wertexplosion zu vermeiden (z.B. bei Verwendung von $ReLU(x): \max(0,x)$ als
-Aktivierungsfunktion), können zusätzliche Normalisierungsschichten verwendet
-werden, welche die Neuronenwerte einer Schicht auf einen erwünschten Zielbereich
-einschränken. Es existieren jedoch auch Aktivierungsfunktionen, die diese
-\emph{Squashing-}Eigenschaft direkt besitzen. Darunter zählt auch die im
-vorherigen Beispiel verwendetete Funktion $tanH$, bei der alle Eingaben auf den
-Zielbereich [-1,1] abgebildet werden.
+Aktivierungsfunktion), können Normalisierungsschichten verwendet
+werden, dessen Aufgabe die Einschränkung von Neuronenwerten auf einen
+erwünschten Zielbereich ist. Es existieren jedoch auch Aktivierungsfunktionen,
+die diese sogenannte \emph{Squashing-}Eigenschaft direkt besitzen. Darunter
+zählt auch die im vorherigen Beispiel verwendetete Funktion $tanH$, bei der
+alle Eingaben auf den Zielbereich [-1,1] abgebildet werden.
 
-Im Folgenden sind sind einige, für neuronale Netzwerke übliche
-Aktivierungsfunktionen abgebildet.\bigskip
+Im Folgenden sind sind einige Aktivierungsfunktionen abgebildet, welche
+üblicherweise in neuronale Netzwerken eingesetzt werden.\bigskip
 
 \begin{figure}[H]
     \begin{minipage}{0.45\textwidth}
@@ -203,26 +208,29 @@ Aktivierungsfunktionen abgebildet.\bigskip
 
 \section{Training}\label{sec:training}
 
-Die Stärken und Schwächen eines neuronalen Netzwerks liegen neben der
-Struktur der Neuronen, der Schichten und den gewählten Aktivierungsfunktionen
-vor allem in den verwendeten Kantengewichten. Diese zu optimieren kann ein
-langwieriger und rechenintensiver Prozess sein. Kleine Änderungen im Aufbau
-des Netzwerks können große Teile von zuvor erlernten Gewichten unbrauchbar
-machen, daher werden Netzwerke häufig an sich selbst trainiert.
-Das bedeutet, dass beim Trainieren eines neuen Netzwerks die initialen
+Wie zuvor erwähnt, liegen die Stärken und Schwächen eines neuronalen Netzwerks
+neben dem Aufbau und der Anzahl der verwendeten Schichten sowie der gewählten
+Aktivierungsfunktionen vor allem in den Kantengewichten. Diese zu optimieren
+kann ein langwieriger und rechenintensiver Prozess sein. Kleine Änderungen in
+der Struktur des Netzwerks können große Teile von zuvor erlernten Gewichten
+unbrauchbar machen, daher werden Netzwerke häufig an sich selbst trainiert.
+Das bedeutet, dass beim Trainieren des Netzwerks die initialen
 Kantengewichte keine emprischen Daten aus anderen (ähnlichen) Netzwerk verwenden,
-sondern diese zu Beginn pseudozufällig gewählt werden.
+selbst wenn beide Netzwerke auf dem identischen Datensatz trainiert werden.
 
 \subsection{Ablauf}
 
-Beim Training werden wiederholt verschiedene Eingaben in das Netzwerk getätigt,
-zu denen das korrekte Ergebnis bekannt ist. In der letzten Schicht des Netzwerks,
-der Ausgabeschicht, werden die vom Netzwerk bestimmten Werte der jeweiligen
-Neuronen mit den erwarteten Werten verglichen.
-Die absolute Differenz dieser wird als Fehler bezeichnet.
-Das Ziel des Trainings ist es, den Fehler durch Anpassung der Kantengewichte zu
-verringern oder im Optimalfall ganz zu eliminieren (Fehler = 0).
-In folgender Abbildung ist ein Fehlerbeispiel dargestellt.\bigskip
+Beim Training werden wiederholt unterschiedliche Eingaben in das Netzwerk gegeben,
+zu denen die korrekten Klassifizierungen bekannt ist. In der letzten Schicht
+des Netzwerks, der Ausgabeschicht, wird die vom Netzwerk bestimmte
+Klassifizierung mit der tatsächlichen Klassifizierung verglichen.
+Konkret werden die vom Netzwerk bestimmten Neuronenwerte in der Ausgabeschicht
+mit den erwarteten Werten verglichen. Die absolute Differenz dieser Werte wird
+als Fehler bezeichnet.
+Beim Training wird diese Information in jedem Durchlauf verwendet, um die
+Kantengewichte so anzupassen, dass der Fehler verringert, oder im
+Optimalfall ganz zu eliminiert wird (Fehler = 0).
+In der folgenden Abbildung ist ein Beispiel einer Fehlerbestimmung dargestellt.\bigskip
 
 \begin{figure}[H]
     \centering
@@ -269,19 +277,21 @@ Es stellt sich nun die Frage, ob und wie errechnet werden kann, welches
 Kantengewicht wie angepasst werden muss, um den Fehler zu verringern.
 Der Begriff der \emph{Backpropagation} beschreibt das Durchlaufen des Netzwerks,
 jedoch entgegen der eigentlichen Laufrichtung und das Rückschließen der
-notwendigen Gewichtsanpassung, um die aktuelle Ausgabe in die gewünschte
-Richtung zu verändern.
+notwendigen Gewichtsanpassung, um die Ausgabewerte der jeweiligen Lerneinheit
+in die gewünschten Richtungen zu verändern.
 
-Um eine Anpassung an einem Kantengewicht vorzunehmen, muss demnach zuerst
-festgestellt werden, wie die errechneten Fehler sich bei Änderungen am Gewicht
-verhalten. Dazu wird die sogenannte \emph{Slope} ermittelt, also die Kurve
-auf der das Kantengewicht im Verhältnis zum Fehler steht. Anschließend
-wird die Steigung dieser Kurve an der aktuellen Stelle (Kantengewicht) errechnet.
-Aus dem Ergebnis lässt sich ableiten, in welche Richtung das Kantengewicht
-justiert werden muss, um den Fehler zu verringern.
-Ein Beispiel dazu befindet sich in der folgenden Abbildung, dort ist die Tangente
-der Fehlerkurve an der Stelle -0.5 in rot dargestellt. Daraus folgt,
-dass eine Erhöhung des zugehörigen Kantengewichts den Fehler weiter verringert.\bigskip
+Um eine Anpassung an einem Kantengewicht vorzunehmen, muss zuerst
+festgestellt werden, wie die errechneten Fehler sich bei Änderungen an einem
+bestimmten Gewicht verhalten. Dazu wird die sogenannte \emph{Slope} ermittelt,
+eine Kurve auf der das Kantengewicht im Verhältnis zum Fehler steht.
+Anschließend wird die Steigung dieser Kurve an der aktuellen Stelle, also
+dem aktuellen Kantengewicht errechnet.
+Offensichtlich lässt sich aus diesem Ergebnis, in welche Richtung das Kantengewicht
+justiert werden muss um den Fehler zu verringern.
+Ein Beispiel dazu befindet sich in der folgenden Abbildung. Dort ist die Tangente
+der Fehlerkurve an der Stelle -0.5 in rot dargestellt.
+Eine Erhöhung des Kantengewichts führt demnach zu einer Verringerung des
+gemessenen Fehlers.\bigskip
 
 \begin{figure}[H]
     \centering
@@ -293,10 +303,11 @@ dass eine Erhöhung des zugehörigen Kantengewichts den Fehler weiter verringert
     \end{tikzpicture}
 \end{figure}
 
-Diese Anpassungen werden in jedem Trainingsdurchlauf für alle Kantengewichte
-durchgeführt, wobei die Stärke der Anpassung häufig konfigurierbar ist.
+Diese Anpassungen werden in jeder Trainingseinheit für alle Kantengewichte
+durchgeführt. Die Bestimmung der Stärke der Anpassung wird als Lernrate
+bezeichnet.
 Die Ermittlung der Fehlerkurve kann mathematisch durch das Verwenden der
-sogenannten \emph{Chainingrule} \cite{Rumelhart} erleichtert werden.
+sogenannten \emph{Chainingrule} \cite{Rumelhart} effizient ermittelt werden.
 Zur Verbildlichung dieser Regel zeigt die folgende Abbildung
 einen Ausschnitt aus einem einfachen neuronalen Netzwerk mit drei Schichten.\bigskip
 
@@ -334,20 +345,25 @@ Diese Kette lässt sich weiter vereinfachen:
     \frac{\delta c}{\delta w_a} & = a\cdot\frac{\delta b_{(2/2)}}{\delta b_{(1/2)}}\cdot\frac{\delta c}{\delta b_{(2/2)}} & \left(\frac{\delta b_{(1/2)}}{\delta w_a} =a\right)                   \\
                                 & = a\cdot f'(b_{(1/2)})\cdot\frac{\delta c}{\delta b_{(2/2)}}                            & \left(\frac{\delta b_{(2/2)}}{\delta b_{(1/2)}} =f'(b_{(1/2)})\right) \\
                                 & = a\cdot f'(a\cdot w_a)\cdot\frac{\delta c}{\delta b_{(2/2)}}                           & \left(b_{(1/2)} =a\cdot w_a\right)                                    \\
-                                & = a\cdot f'(b_{(1/2)})\cdot w_b                                                         & \left(\frac{\delta c}{\delta b_{(2/2)}} =w_b\right)                   \\
+                                & = a\cdot f'(a\cdot w_a)\cdot w_b                                                        & \left(\frac{\delta c}{\delta b_{(2/2)}} =w_b\right)                   \\
 \end{align*}
 
+Mit $a$, $w_a$ bekannt und $f'$ leicht ermittelbar wird auch deutlich, warum
+die üblich verwendeten Aktivierungsfunktionen häufig stetig sind und einfach
+abzuleiten sind.
 Offensichtlich lässt sich dieses Vorgehen auf jede beliebig lange Neuronenkette
-anwenden und erlaubt somit die Ermittlung der Richtungen aller notwendigen
-Gewichtsänderungen.
+ausweiten und erlaubt somit die Ermittlung der Richtungen aller notwendigen
+Gewichtsanpassungen zur Verringerung des Fehlers.
 Im zuvor erwähnten Optimalfall wird jedes Kantengewicht solange angepasst,
 bis ein Fixpunkt erreicht wurde und damit jedes Gewicht genau im Tal der
-jeweiligen Fehlerkurve liegt. Ein häufig auftretendes Problem ist
-das sowohl das zu starke als auch das zu schwache Anpassen der Gewichte.
-Ersteres führt zum hin- und herspringen des verwendeten Gewichts auf der
+jeweiligen Fehlerkurve liegt. Das Erreichen dieses Tals kann erschwert werden,
+wenn die verwendete Lernrate beim Training entweder zu hoch oder zu niedrig ist.
+Daraus können zu starke oder zu schwache Anpassungen der Gewichte folgen.
+Ersteres führt zum hin- und herspringen des ermittelten Gewichts auf der
 Fehlerkurve sodass sich dem Tal nicht mehr angenähert wird.
-Letzteres hingegen führt dazu, dass die Korrektur außerhalb des Optimums
-zum Stillstand kommt. Siehe dazu auch Abbildungen 2.8 und 2.9.
+Letzteres hingegen führt dazu, dass der Umfang der Korrektur stagniert und
+außerhalb des optimalen Gewichts zum Stillstand kommt.
+Siehe dazu auch Abbildungen 2.8 und 2.9.
 
 \begin{minipage}{0.5\textwidth}
     \begin{figure}[H]
@@ -374,6 +390,7 @@ zum Stillstand kommt. Siehe dazu auch Abbildungen 2.8 und 2.9.
     \end{figure}
 \end{minipage}
 
-Nachdem das Training eines neuronalen Netzwerks abgeschlossen ist,
-werden diese erlernten Kantengewichte gespeichert und häufig zur Verwendung
-exportiert.
+Das Training eines neuronalen Netzes wird aufgrund der Rechenintensität und den
+notwendigen Zeitaufwand für gewöhnlich nicht bis zum Optimum durchgeführt.
+Stattdessen wird auf eine bestimmte Genauigkeit hingearbeitet und bei Erfüllung
+dieser die erlernten Kantengewichte gespeichert und zur Wiederverwendung exportiert.
