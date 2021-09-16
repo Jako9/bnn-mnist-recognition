@@ -3,6 +3,7 @@ Nachdem das Netzwerk nun trainiert wurde, müssen die Ergebnisse, die Kantengewi
 \section{Export der Kantengewichte}\label{exportKanten}
 Da es sich bei unserem Netzwerk um ein \textit{FullyConnected Neural Network} handelt, ist insbesondere jedes Neuron mit jedem Neuron der Folgenden Schicht verbunden. Bei unserem BNN ergibt sich also folgende Kantenanzahl
 \[784 \cdot 500 + 500 \cdot 1024 + 1024 \cdot 1024 = 1.952.576 \]
-Diese Gewichte müssen alle, mit möglichst wenig Mehrkosten, in die Datei geschrieben werden. Da es sich bei den Gewichten lediglich um binäre Werte, Einsen und Nullen, handelt, ist kein Trennzeichen zwischen den Gewichten notwendig. Die Gewichte sind außerdem, trivialer Weise, präfixfrei und können fortlaufend in die Datei geschrieben werden.\\
+Diese Gewichte müssen alle mit möglichst wenig Mehrkosten in die Datei geschrieben werden. Da es sich bei den Gewichten lediglich um binäre Werte, somit als Einsen und Nullen darstellbar, handelt, ist kein Trennzeichen zwischen den Gewichten notwendig. Die Gewichte sind außerdem, trivialer Weise, präfixfrei und können fortlaufend in die Datei geschrieben werden.\\
 Um die Gewichte zu extrahieren, wird zuerst über jeden \textit{Layer} iteriert. In jedem \textit{Layer} wird nun jedes Neuron abgelaufen. Jedes dieser Neuronen hat nun jeweils eine Kante zu jedem Neuron in der nachfolgenden Schicht. Hier wird ebenfalls über alle Kanten iteriert und das jeweilige Gewicht wird hinten an eine Variabel an gehangen. Ist nun ein \textit{Layer} fertig, wird der Inhalt der Variable, welche als Zwischenspeicher dient, in die Datei \textit{weights.txt} geschrieben. So wird für jede Schicht ein IO-Zugriff gemacht.
-\section{Export der Schwellwerte}
+\section{Ausblick: Export der Schwellwerte}
+Für eine vollständige Ausführung des Netzwerkes, müssen außerdem die Schwellwerte der Neuronen exportiert werden. Zum Zeitpunkt der Fertigstellung dieser Ausarbeitung ist die Implementierung jedoch noch ausstehend.

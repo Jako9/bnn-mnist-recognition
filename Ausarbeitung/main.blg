@@ -1,15 +1,15 @@
 [0] Config.pm:311> INFO - This is Biber 2.16
 [0] Config.pm:314> INFO - Logfile is 'main.blg'
-[137] biber-MSWIN64:340> INFO - === 
-[183] Biber.pm:415> INFO - Reading 'main.bcf'
-[315] Biber.pm:952> INFO - Found 6 citekeys in bib section 0
-[333] Biber.pm:4340> INFO - Processing section 0
-[349] Biber.pm:4531> INFO - Looking for bibtex format file 'literatur/literatur.bib' for section 0
-[421] bibtex.pm:1689> INFO - LaTeX decoding ...
-[439] bibtex.pm:1494> INFO - Found BibTeX data source 'literatur/literatur.bib'
-[517] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'variable = shifted' with 'variable = non-ignorable'
-[518] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[518] Biber.pm:4168> INFO - Sorting list 'anyt/global//global/global' of type 'entry' with template 'anyt' and locale 'de-DE'
-[518] Biber.pm:4174> INFO - No sort tailoring available for locale 'de-DE'
-[532] bbl.pm:654> INFO - Writing 'main.bbl' with encoding 'UTF-8'
-[537] bbl.pm:757> INFO - Output to main.bbl
+[150] biber-MSWIN64:340> INFO - === 
+[198] Biber.pm:415> INFO - Reading 'main.bcf'
+[329] Biber.pm:952> INFO - Found 6 citekeys in bib section 0
+[348] Biber.pm:4340> INFO - Processing section 0
+[365] Biber.pm:4531> INFO - Looking for bibtex format file 'literatur/literatur.bib' for section 0
+[432] bibtex.pm:1689> INFO - LaTeX decoding ...
+[448] bibtex.pm:1494> INFO - Found BibTeX data source 'literatur/literatur.bib'
+[527] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'variable = shifted' with 'variable = non-ignorable'
+[527] UCollate.pm:68> INFO - Overriding locale 'de-DE' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[527] Biber.pm:4168> INFO - Sorting list 'anyt/global//global/global' of type 'entry' with template 'anyt' and locale 'de-DE'
+[527] Biber.pm:4174> INFO - No sort tailoring available for locale 'de-DE'
+[543] bbl.pm:654> INFO - Writing 'main.bbl' with encoding 'UTF-8'
+[548] bbl.pm:757> INFO - Output to main.bbl
