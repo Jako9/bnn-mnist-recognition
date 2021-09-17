@@ -69,8 +69,11 @@ Der große Vorteil dieser Methode ist jedoch die Informationserhaltung. Wir arbe
 
 Um die verschiedenen Methoden zu Vergleichen, haben wir beide Transformationen und eine Referenzinstanz für $600$ Epochen, bzw. 20 Epochen und 30 Repetitions, trainieren lassen.\\
 
+	\begin{figure}
+		
 	\centering
 	\begin{tabular}{|c|c|c|c|}\hline
+		
 		Run & Non-Binarized    & threshold        & prob              \\\hline
 		1   	& 91.99\%          & 89.24\%          & 92.52\%           \\\hline
 		2   & 91.99\%          & 89.24\%          & 91.82\%           \\\hline
@@ -80,6 +83,7 @@ Um die verschiedenen Methoden zu Vergleichen, haben wir beide Transformationen u
 	\end{tabular}
 	\captionof{figure}{Vergleich}
 	\label{fig:grph}
+\end{figure}
 
 Es ist gut zu erkennen, dass bei der Binarisierung mit der \textit{Threshold}-Methode über $2\%$ Genauigkeit verloren wird. Zudem sind unsere Referenzinstanz und die \textit{Threshold}-Methode bereits konvergiert, heißt sie erzielen keine Verbesserung mehr.\\
  Die \textit{Probability-Transformation} schwankt jedoch noch in der Genauigkeit. Dies liegt überwiegend an der Varianz in der Binarisierung bedingt durch die Wahrscheinlichkeit. Trotz dieser Varianz ist zu erkennen, dass das Mittel der \textit{Probability-Transformation} gegen unsere Referenzinstanz konvergiert. Somit haben wir eine Transformation, bei der wir durch zeitliche Einbuße keine Genauigkeitsverluste verzeichnen müssen.\\
