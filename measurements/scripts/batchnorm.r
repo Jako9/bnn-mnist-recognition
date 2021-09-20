@@ -1,5 +1,5 @@
-data_bn = read.csv("accuracy_with_bn.csv", header = FALSE,check.names=FALSE)
-data_no_bn = read.csv("accuracy_without_bn.csv", header = FALSE,check.names=FALSE)
+data_bn = read.csv("../data/accuracy_with_bn.csv", header = FALSE,check.names=FALSE)
+data_no_bn = read.csv("../data/accuracy_without_bn.csv", header = FALSE,check.names=FALSE)
 xs <- seq(1,51)
 print(max(data_bn)-max(data_no_bn))
 
