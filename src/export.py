@@ -46,17 +46,22 @@ def exportThreshold(model):
 
 
 def export(model):
-    print("Starting export...")
+    """Export the weights into a file
 
+    Args:
+        model (NeuralNetowrk): The NeuralNetwork from which the weights should be exportet
+    """
+    print("Starting export...")
     #clear File
     f = open("../export/weights.txt", "w")
     f.write("")
     f.close()
 
-    #write weigths to file
+    # prepare writing weights to the file
     f = open("../export/weights.txt", "a")
     layerCount = 1
     torch.set_printoptions(profile="full")
+    # loop though th fully-connected layers
     for layer in model.modules():
         if(type(layer) == type(BinarizeLinear(2048, 2048))):
             layerWeights = ""
@@ -66,11 +71,14 @@ def export(model):
             totalLayerNodes = layer.weight.size()[0]
             printProgressBar(0, totalLayerNodes,
                              prefix='Progress:', suffix='Complete', length=50)
+            # loop though each node in a layer                 
             for node in layer.weight:
+                #write each weight for each neuron in a var for later export to reduce IO-costs
                 for edge in enumerate(node):
                     layerWeights += str(max(int(edge[1].item()), 0))
                 finishedNodes += 1
                 printProgressBar(finishedNodes, totalLayerNodes,
                                  prefix='Progress:', suffix='Complete', length=50)
+            # after a layer is finished, write its weights to the file
             f.write(layerWeights[:-1])
     f.close()
