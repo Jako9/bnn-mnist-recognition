@@ -16,9 +16,11 @@ from export import exportThreshold, export
 #run 'pip install matplotlib' in console
 import matplotlib.pyplot as plt
 
-# define BNN-structure
+# define the BNN
 class NeuralNetwork(nn.Module):
     def __init__(self):
+        """Initialize a binary neaural network
+        """
         super(NeuralNetwork, self).__init__()
         self.fc1 = BinarizeLinear(784, 500)
         self.htanh1 = nn.Hardtanh()
@@ -33,6 +35,14 @@ class NeuralNetwork(nn.Module):
         self.logsoftmax = nn.LogSoftmax()
 
     def forward(self, x):
+        """Pass data though the netork by passing it though each layer
+
+        Args:
+            x : The input picture
+
+        Returns:
+            : The 10 activation values of the last layer neurons
+        """
         x = x.view(-1, 28*28)
         x = self.fc1(x)
         x = self.bn1(x)
@@ -53,15 +63,28 @@ class NeuralNetwork(nn.Module):
 
 
 def train(args, model, train_loader, optimizer, device, epoch, iteration):
-    model.train()
+    """Trains the model
 
+    Args:
+        args (argparse.Namespace):  The training parameters
+        model (NeuralNetwork): The NeuralNetwork we are training
+        train_loader (DataLoader): The training-set
+        optimizer : a training optimizer
+        device (torch.device): The cude device (gpu or cpu)
+        epoch (int): The current training epoche
+        iteration (int): The current iteration inside an epoche (relevant for propability-transform)
+    """
+    model.train()
     for batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
+        # calculate the error for given input
         output = model(data)
         loss = F.nll_loss(output, target)
+        # backpropagate through the nework
         loss.backward()
         optimizer.step()
+        #print progress when a batch is completed
         if batch_idx % args.log_interval == 0:
             print('Train Epoch: {}, Iteration: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, iteration, batch_idx * len(data), len(train_loader.dataset),
@@ -71,24 +94,33 @@ def train(args, model, train_loader, optimizer, device, epoch, iteration):
 
 
 def test(model, device, test_loader):
+    """Evaluate the accuracy of the given model
+
+    Args:
+        model (NeuralNetwork): The trained network, now evaluating
+        device (torch.device): The cude device (gpu or cpu)
+        test_loader (DataLoader): The test-set
+
+    Returns:
+        int: The hit-rate of the netr#work on the test-set (accuracy)
+    """
     hit = 0
     total = 0
     print("Evaluating accuracy")
     model.eval()
 
     with torch.no_grad():
+        # iterate though the test-data and extract images and label
         for data in test_loader:
             image, label = data
+            # feed the image into the network
             result = model(image.to(device))
             for i, j in enumerate(result):
+                # check if the highest activation (guess of the network) equals the actual number
                 if torch.argmax(j) == label[i]:
                     hit += 1
                 total += 1
-
     print(f"Accuracy: {100 * hit / total}%")
-    f = open("../measurements/batchsize_"+str(BATCH_SIZE)+".txt", "a")
-    f.write(str(100 * hit / total) + ",")
-    f.close()
     model.train()
     return (100 * hit / total)
 
@@ -126,6 +158,7 @@ def main():
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
     args = parser.parse_args()
+    print(type(args))
     use_cuda = not args.no_cuda and torch.cuda.is_available()
     torch.manual_seed(args.seed)
 
@@ -183,18 +216,22 @@ def main():
     accuracy = test(bnn, device, test_set)
 
     #exporting Weights
-    #export(bnn)
-    #exportThreshold(bnn)
+    export(bnn)
+    exportThreshold(bnn)
     print("Done!")
     return accuracy
 
 
 if __name__ == '__main__':
+    """Train and test a bnn for different runs and print an evaluation afterwards
+    """
+    # Train a new network from scratch with all the same training-parameters and save the accuracy
     accuracies = []
     for x in range(MEASUREMENT_RUNS):
         accuracies.append(main())
     accuracies.append(0)
 
+    # print the evaluation
     print("-----Summary-----")
     i = 0
     for val in accuracies:
