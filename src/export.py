@@ -1,4 +1,5 @@
 import torch
+import math 
 from quantized import BinarizeLinear
 from torch import nn
 
@@ -25,21 +26,30 @@ def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=
         print()
 
 def exportThreshold(model):
-    print("Export thresholds")
+    """Calculate and export the activation thresholds
 
+    Args:
+        model (NeuralNetwork): The model containing the BatchNorm layers to calculate thresholds
+    """
+    print("Export thresholds")
     #clear File
     f = open("../export/thresholds.txt", "w")
     f.write("")
     f.close()
 
-    #write thresholds
+    #prepare file for appandance of thresholds
     f = open("../export/thresholds.txt", "a")
     for layer in model.modules():
         if(type(layer) == type(nn.BatchNorm1d(1024))):
             layerThreshold = "["
-            for node in layer.weight:
-                layerThreshold += (str(node.item())+",")
-            layerThreshold = layerThreshold[:-1]
+            
+            #Calculate the threshold and store it in a helper var for the current layer
+            for ind,node in enumerate(layer.weight):
+                #mean_x - (standard-derr_x/gamma_x)*beta_x           rounded down by int conversion
+                layerThreshold += str(int(layer.running_mean[ind].item() - ( math.sqrt(layer.running_var[ind].item()) / layer.weight[ind].item() )*layer.bias[ind].item())) + ","
+                
+            #remove tailing ","
+            layerThreshold = layerThreshold[:-1]            
             layerThreshold += "]"
             f.write(layerThreshold)
     f.close()
