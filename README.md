@@ -2,7 +2,7 @@
 This repository countains PyTorch training for a BNN.
 
 # Training
-Start src/main.py with desired Parameters. Many default parameters can also be changed permanantly in config.py
+Start src/main.py with desired parameters. Many default parameters can also be changed permanantly in config.py.
 
 # Weights and Thresholds
 Recent weights and thresholds can be found in the export folder.
