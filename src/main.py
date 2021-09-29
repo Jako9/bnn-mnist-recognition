@@ -126,6 +126,11 @@ def test(model, device, test_loader):
 
 
 def main():
+    """Run Import, Training, Test and Export
+
+    Returns:
+        int: The evaluated accuracy
+    """
     if torch.cuda.is_available():
         # you can continue going on here, like cuda:1 cuda:2....etc.
         device = torch.device("cuda")
@@ -134,6 +139,7 @@ def main():
         device = torch.device("cpu")
         print("Running on the CPU")
 
+    #Args
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
     parser.add_argument('--batch-size', type=int, default=BATCH_SIZE, metavar='N',
                         help='input batch size for training (default: 200)')
@@ -174,6 +180,7 @@ def main():
 
     # Configure MNIST-Dataset => Training and Testset(s)
     iterationData = []
+    # Repeat Input binirazation for "repetition" times
     for i in range (0, args.repetitions):
         if(args.probabilityTransform):
             iterationData.append(datasets.MNIST(
@@ -186,7 +193,7 @@ def main():
                                                                               ThresholdTransform(
                                                                                   max_val=args.threshold)
                                                                                  ])))
-
+    # Show the binarization of a specific image
     if(args.showNumbers):
         for iteration in iterationData:
             i = 0
