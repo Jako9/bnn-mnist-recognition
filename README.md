@@ -7,5 +7,5 @@ Start src/main.py with desired Parameters. Many default parameters can also be c
 # Weights and Thresholds
 Recent weights and thresholds can be found in the export folder.
 
-#Measurements
+# Measurements
 Evaluation data as well as interpreting scripts can be found in the measurements folder
