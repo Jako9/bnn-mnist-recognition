@@ -19,7 +19,7 @@ class ProbabilityTransform(object):
         binarizedPicture = x.numpy()
         return torch.Tensor(fastBinarization(binarizedPicture))
 
-
+#Njit optimized iteration through pixelarray
 @njit()
 def fastBinarization(binarizedPicture):
     for i,dim1 in enumerate(binarizedPicture[0]):

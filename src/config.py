@@ -19,6 +19,3 @@ SELECTED_NUMBER_INDEX = 2 #index 2 is a good looking 4 ;)
 
 #How often should the training be done with the same parameter
 MEASUREMENT_RUNS = 1
-
-
-#88,3
