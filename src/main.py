@@ -157,6 +157,16 @@ def main():
                         help='how many batches to wait before logging training status')
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
+    parser.add_argument('--repetitions', type=int, default=REPETITIONS, metavar='R',
+                        help='how many repetitions should be used using the same training-set (default: 1)')
+    parser.add_argument('--probabilityTransform', action='store_true', default=USE_PROBABILITY_TRANSFORM,
+                        help='For using ProbabilityTransform (default = True)')
+    parser.add_argument('--showNumbers', action='store_true', default=SHOW_PROCESSED_NUMBERS,
+                        help='For showing processed Numbers of Dataset (default = False)')
+    parser.add_argument('--selectedNumber', type=int, default=SELECTED_NUMBER_INDEX, metavar='S',
+                        help='Index of number to be shown (default: 2)')
+    parser.add_argument('--threshold', type=int, default=THRESHOLD, metavar='T',
+                        help='Threshold for when using Threshold-Transform (default: 150)')
     args = parser.parse_args()
     print(type(args))
     use_cuda = not args.no_cuda and torch.cuda.is_available()
@@ -164,8 +174,8 @@ def main():
 
     # Configure MNIST-Dataset => Training and Testset(s)
     iterationData = []
-    for i in range (0, REPETITIONS):
-        if(USE_PROBABILITY_TRANSFORM):
+    for i in range (0, args.repetitions):
+        if(args.probabilityTransform):
             iterationData.append(datasets.MNIST(
                 "", train=True, download=True, transform=transforms.Compose([transforms.ToTensor(),
                                                                               ProbabilityTransform()
@@ -174,14 +184,14 @@ def main():
             iterationData.append(datasets.MNIST(
                 "", train=True, download=True, transform=transforms.Compose([transforms.ToTensor(),
                                                                               ThresholdTransform(
-                                                                                  max_val=THRESHOLD)
+                                                                                  max_val=args.threshold)
                                                                                  ])))
 
-    if(SHOW_PROCESSED_NUMBERS):
+    if(args.showNumbers):
         for iteration in iterationData:
             i = 0
             for data in iteration:
-                if(i==SELECTED_NUMBER_INDEX):
+                if(i==args.selectedNumber):
                     break
                 i+=1
             plt.imshow(data[0][0].view(28,28))
@@ -189,14 +199,14 @@ def main():
 
     training_setData = []
     # Trainingsdaten einlesen
-    for i in range (0, REPETITIONS):
+    for i in range (0, args.repetitions):
         training_setData.append(DataLoader(
-            iterationData[i], batch_size=args.batch_size, shuffle= not SHOW_PROCESSED_NUMBERS))
+            iterationData[i], batch_size=args.batch_size, shuffle= not args.showNumbers))
 
     test_data = datasets.MNIST(
         "", train=False, download=True, transform=transforms.Compose([transforms.ToTensor(),
                                                                       ThresholdTransform(
-                                                                                  max_val=THRESHOLD)
+                                                                                  max_val=args.threshold)
 
                                                                       ]))
     test_set = DataLoader(
@@ -208,9 +218,9 @@ def main():
     optimizer = optim.Adadelta(bnn.parameters(), lr=args.lr)
 
     for epoch in range(args.epochs):
-        for iteration in range (0, REPETITIONS):
-            train(args, bnn, training_setData[iteration], optimizer, device, epoch, iteration)            
-            print(f"Progress: Epoch: {epoch+1}/{args.epochs}, Iteration: {iteration+1}/{REPETITIONS}")
+        for iteration in range (0, args.repetitions):
+            train(args, bnn, training_setData[iteration], optimizer, device, epoch, iteration)
+            print(f"Progress: Epoch: {epoch+1}/{args.epochs}, Iteration: {iteration+1}/{args.repetitions}")
 
     #evaluate calculated BNN
     accuracy = test(bnn, device, test_set)
