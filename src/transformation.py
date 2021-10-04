@@ -27,7 +27,7 @@ class ThresholdTransform(object):
             torch.Tensor: Same image in tensor-form but binarized
         """
         return (x > self.max_val).to(x.dtype)  # do not change the data type
-s
+        
 class ProbabilityTransform(object):
     """Binarize Tensor via probability
     """
